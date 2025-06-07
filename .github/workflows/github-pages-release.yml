@@ -53,12 +53,10 @@ jobs:
         uses: actions/configure-pages@v4
         with:
           enablement: true
-          # token:
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v4
         with:
-          # Upload dist dir
           path: './dist'
 
       - name: Deploy to GitHub Pages 🚀
