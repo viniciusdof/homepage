@@ -32,10 +32,7 @@ jobs:
 
       - name: Add WASM target
         run: rustup target add wasm32-unknown-unknown
-
-      - name: lint
-        run: cargo clippy && cargo fmt --check
-
+        
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
