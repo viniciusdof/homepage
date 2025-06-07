@@ -42,10 +42,14 @@ jobs:
 
       - name: Download and install latest Trunk release
         run: |
-          curl -sLO "https://github.com/trunk-rs/trunk/releases/latest/download/trunk-x86_64-unknown-linux-gnu.tar.gz" | tar -xzf-
+          curl -LO https://github.com/trunk-rs/trunk/releases/latest/download/trunk-x86_64-unknown-linux-gnu.tar.gz
+          tar -xzf trunk-x86_64-unknown-linux-gnu.tar.gz
+          sudo mv trunk /usr/local/bin
+          trunk -V 
+
 
       - name: Build with Trunk
-        run: ./trunk build --release --public-url "${GITHUB_REPOSITORY#*/}"
+        run: trunk build --release --public-url "${GITHUB_REPOSITORY#*/}"
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
