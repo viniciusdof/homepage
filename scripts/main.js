@@ -1,176 +1,65 @@
-const companions = [
-  {
-    art: `
-     _______
-    |NEOVIM |
-    |_______|
-    (⌐■_■)
-    /|_|
-    `,
-    lines: [
-      ":wq é minha religião",
-      "Plug 'vim-airline/vim-airline'",
-      "nvim > tudo",
-      "Você saiu com :q?",
-      "hjkl é meu W A S D",
-    ],
-  },
-  {
-    art: `
-    (\\__/)
-    (•ㅅ•)
-    / 　 づ
-    `,
-    lines: [
-      "Esse site é um experimento de CSS",
-      "JavaScript caótico ativado",
-      "Talvez você devesse fechar isso",
-    ],
-  },
-  {
-    art: `
-    (\\(\\
-    (-.-)
-    o_(")(")
-    `,
-    lines: [
-      "Você ainda tá aqui?",
-      "Clube do vinil eterno",
-      "Se fosse estável não seria divertido",
-    ],
-  },
-];
+import { companions, pickCompanion } from "./companion.js";
+import { spawnChaos } from "./chaos.js";
+import { updateMarquee } from "./marquee.js";
+import { toggleTheme } from "./theme.js";
+import { updateXeyes } from "./xeyes.js";
 
 let currentIndex = 0;
-function pickCompanion(index = 0) {
-  const data = companions[index];
-  document.getElementById("companion-art").innerText = data.art;
-  document.getElementById("companion-dialog").innerText =
-    data.lines[Math.floor(Math.random() * data.lines.length)];
-}
-pickCompanion();
+let darkMode = true;
+let chaosActive = false;
 
-const visitorCount = Math.floor(Math.random() * 10000) + 1;
-document.getElementById("visitor-counter").innerText =
-  "Visitantes: " +
-  visitorCount.toLocaleString("pt-BR") +
-  " (QUE INCRIVEL!!!!!!!!!!!!!!!!)";
+const elArt = document.getElementById("companion-art");
+const elDialog = document.getElementById("companion-dialog");
+const elVisitor = document.getElementById("visitor-counter");
+const elChaosBtn = document.getElementById("toggle-chaos");
+const elChangeBtn = document.getElementById("change-companion");
+const elMarquee = document.getElementById("ascii-marquee");
+const elThemeBtn = document.getElementById("toggle-theme");
+const elXeyes = document.getElementById("xeyes");
 
-const chaosLines = [
-  "😵 VOCÊ ESTÁ NO LUGAR ERRADO",
-  "👻 SAIA ENQUANTO É TEMPO",
-  "💥 HTML NÃO DEVERIA FAZER ISSO",
-  "🌀 ISSO AQUI É UMA VIAGEM",
-  "🧠 VOCÊ AINDA TEM SANIDADE?",
-  "🔊 ALERTA! ALERTA! ALERTA!",
-];
-function spawnChaos() {
-  const el = document.createElement("div");
-  el.className = "chaos-message";
-  el.innerText = chaosLines[Math.floor(Math.random() * chaosLines.length)];
-  el.style.top = Math.random() * window.innerHeight + "px";
-  el.style.left = Math.random() * window.innerWidth + "px";
-  el.style.color = `hsl(${Math.floor(Math.random() * 360)}, 100%, 50%)`;
-  el.style.fontSize = `${10 + Math.random() * 20}px`;
-  document.body.appendChild(el);
-  setTimeout(() => el.remove(), 3000);
+pickCompanion(currentIndex, elArt, elDialog);
+
+elVisitor.innerText =
+  "Visitantes: " + (Math.floor(Math.random() * 10000) + 1).toLocaleString("pt-BR") + " (QUE INCRIVEL!!!!!!!!!!!!!!!!)";
+
+const companionEmojis = ["✨", "🎲", "💫", "👾", "🎉", "🧞"];
+function updateCompanionBtn() {
+  elChangeBtn.textContent = companionEmojis[Math.floor(Math.random() * companionEmojis.length)];
 }
+elChangeBtn.addEventListener("click", () => {
+  currentIndex = (currentIndex + 1) % companions.length;
+  pickCompanion(currentIndex, elArt, elDialog);
+  updateCompanionBtn();
+});
+updateCompanionBtn();
 
 const chaosEmojis = ["🔇", "🔊", "🛑", "😶", "🙉", "🎭"];
-const companionEmojis = ["✨", "🎲", "💫", "👾", "🎉", "🧞"];
-
-const chaosBtn = document.getElementById("toggle-chaos");
-const changeBtn = document.getElementById("change-companion");
-
-let chaosActive = false;
 function updateChaosBtn() {
-  const emoji = chaosEmojis[Math.floor(Math.random() * chaosEmojis.length)];
-  chaosBtn.textContent = emoji;
+  elChaosBtn.textContent = chaosEmojis[Math.floor(Math.random() * chaosEmojis.length)];
 }
-chaosBtn.addEventListener("click", () => {
+elChaosBtn.addEventListener("click", () => {
   chaosActive = !chaosActive;
   updateChaosBtn();
 });
 updateChaosBtn();
 
-function updateCompanionBtn() {
-  const emoji =
-    companionEmojis[Math.floor(Math.random() * companionEmojis.length)];
-  changeBtn.textContent = emoji;
-}
-changeBtn.addEventListener("click", () => {
-  currentIndex = (currentIndex + 1) % companions.length;
-  pickCompanion(currentIndex);
-  updateCompanionBtn();
-});
-updateCompanionBtn();
 
 setInterval(() => {
   if (chaosActive) spawnChaos();
 }, 800);
 
-const marqueeLines = [
-  ">>> 1GB pra rodar um contador <<<",
-  ">>> :q para sair <<<",
-  ">>> It's bigger on the inside <<<",
-  ">>> Allons-y! <<<",
-  ">>> Obrigado por visitar! <<<",
-  ">>> Você está em território proibido <<<",
-  ">>> Digite 'exit' para sair... <<<",
-  ">>> ERROR 404: Realidade não encontrada <<<",
-];
-let marqueeIndex = 0;
-function updateMarquee() {
-  const marqueeEl = document.getElementById("ascii-marquee");
-  const lineHeight = parseFloat(getComputedStyle(document.body).fontSize);
-  const maxLines = Math.floor(marqueeEl.clientHeight / lineHeight);
-  const display = [];
-  for (let i = 0; i < maxLines; i++) {
-    const line = marqueeLines[(marqueeIndex + i) % marqueeLines.length];
-    display.push(line);
-  }
-  marqueeEl.innerText = display.join("\n");
-  marqueeIndex = (marqueeIndex + 1) % marqueeLines.length;
-}
-setInterval(updateMarquee, 1000);
-updateMarquee();
 
-const toggleButton = document.getElementById("toggle-theme");
-let darkMode = true;
-toggleButton.addEventListener("click", () => {
+setInterval(() => updateMarquee(elMarquee), 1000);
+updateMarquee(elMarquee);
+
+
+elThemeBtn.addEventListener("click", () => {
   darkMode = !darkMode;
-  document.documentElement.style.setProperty(
-    "--bg",
-    darkMode ? "black" : "#003B8B",
-  );
-  document.documentElement.style.setProperty(
-    "--fg",
-    darkMode ? "lime" : "white",
-  );
-  document.documentElement.style.setProperty(
-    "--border",
-    darkMode ? "magenta" : "lightblue",
-  );
-  toggleButton.textContent = darkMode ? "🌙" : "☀️";
+  toggleTheme(darkMode);
+  elThemeBtn.textContent = darkMode ? "🌙" : "☀️";
 });
 
+
 document.addEventListener("mousemove", (e) => {
-  const xeyes = document.getElementById("xeyes");
-  if (!xeyes) return;
-  const maxShift = 1;
-  const centerX = window.innerWidth / 2;
-  const centerY = window.innerHeight / 2;
-  const dx = Math.max(
-    -maxShift,
-    Math.min(maxShift, (e.clientX - centerX) / 100),
-  );
-  const dy = Math.max(
-    -maxShift,
-    Math.min(maxShift, (e.clientY - centerY) / 100),
-  );
-  const eye = `  __     __
- / o\\~~~/o \\
-(   ${dy > 0.5 ? "o o" : ". ."}   )
- \\__/ ${dx > 0 ? "v" : "^"} \\__/`;
-  xeyes.innerText = eye;
+  updateXeyes(elXeyes, e.clientX, e.clientY);
 });
