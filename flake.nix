@@ -26,6 +26,8 @@
             rust
             pkgs.rust-analyzer
             pkgs.trunk
+            pkgs.leptosfmt
+            pkgs.rustfmt
           ];
         };
       });
