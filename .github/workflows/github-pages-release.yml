@@ -42,7 +42,7 @@ jobs:
 
       - name: Download and install latest Trunk release
         run: |
-          curl -sLO "https://github.com/tailwindlabs/tailwindcss/releases/latest/download/trunk-x86_64-unknown-linux-gnu.tar.gz" | tar -xzf-
+          curl -sLO "https://github.com/trunk-rs/trunk/releases/latest/download/trunk-x86_64-unknown-linux-gnu.tar.gz" | tar -xzf-
 
       - name: Build with Trunk
         run: ./trunk build --release --public-url "${GITHUB_REPOSITORY#*/}"
