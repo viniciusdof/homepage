@@ -16,13 +16,10 @@ concurrency:
 
 jobs:
   Github-Pages-Release:
-
     timeout-minutes: 10
-
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
     runs-on: ubuntu-latest
 
     steps:
@@ -37,14 +34,23 @@ jobs:
         run: rustup target add wasm32-unknown-unknown
 
       - name: lint
-        run: cargo clippy & cargo fmt
+        run: cargo clippy && cargo fmt --check
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install TailwindCSS
+        run: |
+          npm install -D tailwindcss
+          npx tailwindcss -v
 
       - name: Download and install latest Trunk release
         run: |
           LATEST=$(curl -s https://api.github.com/repos/trunk-rs/trunk/releases/latest | jq -r '.tag_name')
           echo "Latest Trunk release: $LATEST"
           wget -qO- "https://github.com/trunk-rs/trunk/releases/download/${LATEST}/trunk-x86_64-unknown-linux-gnu.tar.gz" | tar -xzf-
-
 
       - name: Build with Trunk
         run: ./trunk build --release --public-url "${GITHUB_REPOSITORY#*/}"
@@ -55,7 +61,7 @@ jobs:
           enablement: true
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@3.0.1
+        uses: actions/upload-pages-artifact@3.0.1 
         with:
           path: './dist'
 
