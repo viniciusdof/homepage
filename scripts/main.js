@@ -2,7 +2,7 @@ import { companions, pickCompanion } from "./companion.js";
 import { spawnChaos } from "./chaos.js";
 import { updateMarquee } from "./marquee.js";
 import { toggleTheme } from "./theme.js";
-import { updateXeyes } from "./xeyes.js";
+//import { updateXeyes } from "./xeyes.js";
 
 let currentIndex = 0;
 let darkMode = true;
@@ -15,7 +15,7 @@ const elChaosBtn = document.getElementById("toggle-chaos");
 const elChangeBtn = document.getElementById("change-companion");
 const elMarquee = document.getElementById("ascii-marquee");
 const elThemeBtn = document.getElementById("toggle-theme");
-const elXeyes = document.getElementById("xeyes");
+//const elXeyes = document.getElementById("xeyes");
 
 pickCompanion(currentIndex, elArt, elDialog);
 
@@ -60,6 +60,8 @@ elThemeBtn.addEventListener("click", () => {
 });
 
 
+/*
 document.addEventListener("mousemove", (e) => {
   updateXeyes(elXeyes, e.clientX, e.clientY);
 });
+*/
