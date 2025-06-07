@@ -2,4 +2,9 @@
 rustflags = ["--cfg", "erase_components"]
 
 [target.wasm32-unknown-unknown]
-rustflags = ["--cfg", "erase_components"]
+rustflags = [
+    "--cfg",
+    "erase_components",
+    "--cfg",
+    'getrandom_backend="wasm_js"',
+]
