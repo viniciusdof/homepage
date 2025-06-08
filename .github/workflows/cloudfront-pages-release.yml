@@ -1,4 +1,4 @@
-name: Release to Github Pages
+name: Release to Cloudflare Pages
 
 on:
   push:
@@ -15,11 +15,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  Github-Pages-Release:
+  build-and-deploy:
     timeout-minutes: 10
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
 
     steps:
@@ -49,18 +46,12 @@ jobs:
 
 
       - name: Build with Trunk
-        run: trunk build --release --public-url "${GITHUB_REPOSITORY#*/}"
+        run: trunk build --release"
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
         with:
-          enablement: true
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@3.0.1 
-        with:
-          path: './dist'
-
-      - name: Deploy to GitHub Pages 🚀
-        id: deployment
-        uses: actions/deploy-pages@v4
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}
+          directory: './dist'
