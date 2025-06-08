@@ -119,13 +119,11 @@ pub fn Marquee() -> impl IntoView {
     });
 
     view! {
-        <pre class="whitespace-pre-wrap text-[14px] h-[100px] border-1 border-pink-400 border-dashed p-1.5 mt-2 flex flex-col justify-start overflow-hidden">
+        <pre class="whitespace-pre-wrap text-[12px] sm:text-[14px] h-[80px] sm:h-[100px] border-1 border-pink-400 border-dashed p-1.5 mt-2 flex flex-col justify-start overflow-hidden">
             <For
                 each=move || output_lines.get()
                 key=|line| line.clone()
-                children=move |line| view! {
-                    <div>{line}</div>
-                }
+                children=move |line| view! { <div>{line}</div> }
             />
             <div>{move || current_line.get()}</div>
         </pre>

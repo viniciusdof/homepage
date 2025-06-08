@@ -15,7 +15,7 @@ pub fn VisitorCounter() -> impl IntoView {
     let formatted = formatted.chars().rev().collect::<String>();
 
     view! {
-        <pre class="mb-10">
+        <pre class="mb-10 text-xs sm:text-sm">
             {format!("Visitantes: {} (QUE INCRIVEL!!!!!!!!!!!!!!!!)", formatted)}
         </pre>
     }

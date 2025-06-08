@@ -12,7 +12,7 @@ pub fn Link() -> impl IntoView {
     ];
 
     view! {
-        <pre>
+        <pre class="text-xs sm:text-sm whitespace-pre-wrap">
             "=============== LINKS ==============="
             {links
                 .into_iter()

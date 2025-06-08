@@ -17,7 +17,6 @@ pub fn Xeyes() -> impl IntoView {
         (cx + dx * scale, cy + dy * scale)
     }
 
-    // substitui o antigo `on_mount` ou `create_effect`
     Effect::new(move |_| {
         let closure = Closure::wrap(Box::new(move |ev: web_sys::MouseEvent| {
             let w = web_sys::window()
@@ -71,12 +70,12 @@ pub fn Xeyes() -> impl IntoView {
     };
 
     view! {
-        <div class="fixed ml-auto right-2 pointer-events-none">
+        <div class="right-2 top-1 sm:top-4 pointer-events-none">
             <svg
                 viewBox=view_box
                 width="112"
                 height="64"
-                class="text-black dark:text-white"
+                class="w-28 h-16 text-black dark:text-white"
                 style="image-rendering: pixelated; shape-rendering: crispEdges;"
             >
                 <circle
