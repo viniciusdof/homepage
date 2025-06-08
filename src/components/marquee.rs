@@ -1,5 +1,5 @@
 use leptos::prelude::*;
-use rand::rng; // <- atualizado
+use rand::rng;
 use rand::seq::SliceRandom;
 use std::sync::Arc;
 use std::time::Duration;
@@ -37,7 +37,7 @@ pub fn Marquee() -> impl IntoView {
         "scp ~/alma servidor:/dev/null",
     ];
 
-    lines.shuffle(&mut rng()); // <- atualizado
+    lines.shuffle(&mut rng());
 
     let lines = Arc::new(lines);
 

@@ -1,7 +1,6 @@
 use crate::components::xeyes::Xeyes;
 use leptos::prelude::*;
 
-//
 #[component]
 pub fn HeaderBar() -> impl IntoView {
     view! {
