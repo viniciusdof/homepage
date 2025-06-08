@@ -31,7 +31,7 @@ pub fn Marquee() -> impl IntoView {
         "alias vida=':q!'",
         "top -n 1 -> só decepção",
         "git commit -m 'tentando de novo'",
-        "mv ~/sonhos ~/backup/2012",
+        "mv ~/sonhos ~/backup/2019",
         "watch -n 1 'echo tentando...'",
         "man reality # página não encontrada",
         "scp ~/alma servidor:/dev/null",
