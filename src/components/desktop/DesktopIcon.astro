@@ -1,10 +1,11 @@
 ---
 import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
 
 interface Props {
   id: string;
   label: string;
-  icon?: string;
+  icon?: string | ImageMetadata | { src: string; width: number; height: number; format: string };
   top?: string;
   left?: string;
   right?: string;
@@ -14,7 +15,7 @@ interface Props {
 const {
   id,
   label,
-  icon = "/favicon.svg",
+  icon,
   top = "auto",
   left = "auto",
   right = "auto",
@@ -31,7 +32,7 @@ const {
   tabindex="0"
 >
   <div class="w-[32px] h-[32px] mb-[5px] flex items-center justify-center">
-    <Image src={icon} alt={label} width={32} height={32} class="w-[32px] h-[32px] group-active:brightness-50 transition-all" loading="eager" />
+    {icon && <Image src={icon as any} alt={label} width={32} height={32} class="w-[32px] h-[32px] group-active:brightness-50 transition-all" loading="eager" />}
   </div>
   <span class="text-white bg-black/50 px-1 py-[1px] rounded-[3px] break-words text-[12px] leading-tight select-none">
     {label}

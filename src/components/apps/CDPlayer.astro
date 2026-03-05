@@ -2,6 +2,12 @@
 import { Image } from "astro:assets";
 import { getLangFromUrl, useTranslations } from "../../i18n/utils";
 
+import nextIcon from "/public/img/16x16/next.png";
+import pauseIcon from "/public/img/16x16/pause.png";
+import playIcon from "/public/img/16x16/play.png";
+import prevIcon from "/public/img/16x16/prev.png";
+import buyIcon from "/public/img/32x32/buy.png";
+
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 ---
@@ -61,16 +67,16 @@ const t = useTranslations(lang);
 
     <div class="flex gap-1 justify-center">
       <button id="btn-prev" class="be-button !p-1 flex-1 flex items-center justify-center" title={t('player.prev')}>
-        <Image src="/img/16x16/prev.png" alt="Prev" width={16} height={16} class="w-4 h-4" />
+        <Image src={prevIcon} alt="Prev" width={16} height={16} class="w-4 h-4" />
       </button>
 
       <button id="btn-play-pause" class="be-button !p-1 flex-[2] flex items-center justify-center group" title={t('player.play_pause')}>
-        <Image id="img-play" src="/img/16x16/play.png" alt="Play" width={16} height={16} class="w-4 h-4" />
-        <Image id="img-pause" src="/img/16x16/pause.png" alt="Pause" width={16} height={16} class="w-4 h-4 hidden" />
+        <Image id="img-play" src={playIcon} alt="Play" width={16} height={16} class="w-4 h-4" />
+        <Image id="img-pause" src={pauseIcon} alt="Pause" width={16} height={16} class="w-4 h-4 hidden" />
       </button>
 
       <button id="btn-next" class="be-button !p-1 flex-1 flex items-center justify-center" title={t('player.next')}>
-        <Image src="/img/16x16/next.png" alt="Next" width={16} height={16} class="w-4 h-4" />
+        <Image src={nextIcon} alt="Next" width={16} height={16} class="w-4 h-4" />
       </button>
     </div>
     <div class="flex items-center gap-1 be-well bg-be-grey/50 p-1">
@@ -90,7 +96,7 @@ const t = useTranslations(lang);
     <div class="flex flex-col gap-1 mt-1">
       <div class="px-2 py-0.5 text-[7px] text-be-shadow font-bold uppercase leading-tight">{t('player.collection')}</div>
       <a id="buy-btn" href="#" target="_blank" class="be-button !bg-be-yellow/80 !flex flex-row items-center justify-center py-2 flex-1 text-[10px] uppercase font-bold gap-3" title={t('player.buy_tooltip')}>
-        <Image src="/img/32x32/buy.png" alt="Buy" width={24} height={24} class="w-6 h-6 object-contain" />
+        <Image src={buyIcon} alt="Buy" width={24} height={24} class="w-6 h-6 object-contain" />
         <span class="mt-[2px]">{t('player.buy')}</span>
       </a>
     </div>

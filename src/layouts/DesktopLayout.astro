@@ -2,6 +2,8 @@
 import "../styles/global.css";
 import Deskbar from "../components/desktop/Deskbar.astro";
 import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import faviconPng from "/public/favicon.png";
+import faviconSvg from "/public/favicon.svg";
 
 interface Props {
   title?: string;
@@ -12,7 +14,7 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
 const description = t("site.description");
-const ogImage = new URL("/favicon.png", Astro.url);
+const ogImage = new URL(faviconPng.src, Astro.url);
 ---
 
 <!doctype html>
@@ -36,7 +38,7 @@ const ogImage = new URL("/favicon.png", Astro.url);
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={ogImage} />
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={faviconSvg.src} />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <meta name="generator" content={Astro.generator} />
   </head>

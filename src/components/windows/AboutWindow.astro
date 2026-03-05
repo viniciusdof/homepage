@@ -4,6 +4,9 @@ import { getLangFromUrl, useTranslations } from "../../i18n/utils";
 import BeButton from "../core/BeButton.astro";
 import BeWindow from "../core/BeWindow.astro";
 
+import profileAvatar from "/public/img/viniciusdof.svg";
+import cdplayerIcon from "/public/img/32x32/cdplayer.png";
+
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 ---
@@ -19,7 +22,7 @@ const t = useTranslations(lang);
 >
   <div class="flex flex-col items-center text-center">
     <Image
-      src="/img/viniciusdof.svg"
+      src={profileAvatar}
       width={80}
       height={80}
       class="w-20 h-20 border border-black mb-3 bg-white"
@@ -44,7 +47,7 @@ const t = useTranslations(lang);
         <div class="relative flex-shrink-0">
           <Image
             id="np-image"
-            src="/img/32x32/cdplayer.png"
+            src={cdplayerIcon}
             alt="Album cover"
             width={48}
             height={48}
@@ -68,14 +71,12 @@ const t = useTranslations(lang);
             <span
               id="np-name"
               class="text-[11px] font-mono font-bold text-be-yellow drop-shadow-[0_0_2px_rgba(254,211,0,0.5)] block truncate"
-              style="contain: layout paint;"
-            ></span>
+              style="contain: layout paint;"></span>
           </div>
           <span
             id="np-artist"
             class="text-[9px] font-mono text-be-yellow/90 truncate"
-            style="contain: layout paint; display: block;"
-          ></span>
+            style="contain: layout paint; display: block;"></span>
         </div>
       </div>
 
@@ -89,8 +90,7 @@ const t = useTranslations(lang);
         <span
           id="np-loading-msg"
           class="text-[9px] font-mono text-be-yellow italic"
-          aria-label="Loading message"
-          >RETRIEVING VIBES...</span
+          aria-label="Loading message">RETRIEVING VIBES...</span
         >
       </div>
 
@@ -139,16 +139,17 @@ const t = useTranslations(lang);
 <script>
   import { ui } from "../../i18n/ui";
   const lang = (document.documentElement.lang || "pt-br") as keyof typeof ui;
-  const t = (key: string) => (ui[lang] as any)[key] || (ui['pt-br'] as any)[key];
+  const t = (key: string) =>
+    (ui[lang] as any)[key] || (ui["pt-br"] as any)[key];
 
   function setAboutIsolatedText(el: HTMLElement, text: string) {
     if (!el.shadowRoot) {
-      const shadow = el.attachShadow({ mode: 'open' });
-      const span = document.createElement('span');
-      span.id = 'inner';
+      const shadow = el.attachShadow({ mode: "open" });
+      const span = document.createElement("span");
+      span.id = "inner";
       shadow.appendChild(span);
     }
-    const inner = el.shadowRoot!.getElementById('inner')!;
+    const inner = el.shadowRoot!.getElementById("inner")!;
     if (inner.textContent !== text) {
       inner.textContent = text;
     }
@@ -164,21 +165,22 @@ const t = useTranslations(lang);
       return;
     }
 
-    const lang = document.documentElement.lang || "pt-br";
-    
     const messages = [
-      t('profile.loading_1'),
-      t('profile.loading_2'),
-      t('profile.loading_3'),
-      t('profile.loading_4'),
-      t('profile.loading_5'),
-      t('profile.loading_6'),
-      t('profile.loading_7'),
-      t('profile.loading_8'),
+      t("profile.loading_1"),
+      t("profile.loading_2"),
+      t("profile.loading_3"),
+      t("profile.loading_4"),
+      t("profile.loading_5"),
+      t("profile.loading_6"),
+      t("profile.loading_7"),
+      t("profile.loading_8"),
     ].filter(Boolean);
 
     if (npLoadingMsg) {
-      setAboutIsolatedText(npLoadingMsg, messages[Math.floor(Math.random() * messages.length)]);
+      setAboutIsolatedText(
+        npLoadingMsg,
+        messages[Math.floor(Math.random() * messages.length)],
+      );
     }
 
     try {
@@ -198,7 +200,7 @@ const t = useTranslations(lang);
 
       if (img) {
         img.src = data.image || "/img/32x32/cdplayer.png";
-        img.alt = data.nowPlaying 
+        img.alt = data.nowPlaying
           ? `Now playing: ${data.name} by ${data.artist}`
           : `Last played: ${data.name} by ${data.artist}`;
       }
@@ -212,10 +214,10 @@ const t = useTranslations(lang);
       if (status) {
         let statusText = "";
         if (data.nowPlaying) {
-          statusText = t('profile.now_playing');
+          statusText = t("profile.now_playing");
           indicator?.classList.remove("hidden");
         } else {
-          statusText = t('profile.last_scrobble');
+          statusText = t("profile.last_scrobble");
           indicator?.classList.add("hidden");
         }
         setAboutIsolatedText(status, statusText);
