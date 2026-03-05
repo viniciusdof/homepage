@@ -1,0 +1,19 @@
+---
+import BeWindow from "../core/BeWindow.astro";
+import XEyes from "../apps/XEyes.astro";
+import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<BeWindow
+  id="xeyes"
+  title={t("nav.xeyes")}
+  width="200px"
+  height="150px"
+  top="50px"
+  left="550px"
+>
+  <XEyes />
+</BeWindow>

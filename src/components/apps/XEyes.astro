@@ -1,0 +1,117 @@
+---
+---
+<div id="xeyes-app" class="flex justify-center items-center h-full bg-be-grey relative xeyes-container" role="img" aria-label="Interactive eyes that follow the mouse">
+  <div class="flex gap-4 items-center justify-center p-4 relative z-10">
+    <div class="horns absolute top-0 left-0 w-full flex justify-center gap-[56px] pointer-events-none -z-10" aria-hidden="true">
+      <div class="horn-left w-0 h-0 border-l-[12px] border-l-transparent border-r-[8px] border-r-transparent border-b-[35px] border-b-red-700 opacity-0 transition-all duration-700 ease-back"></div>
+      <div class="horn-right w-0 h-0 border-r-[12px] border-r-transparent border-l-[8px] border-l-transparent border-b-[35px] border-b-red-700 opacity-0 transition-all duration-700 ease-back"></div>
+    </div>
+
+    <div class="relative">
+      <div class="eye w-[60px] h-[85px] bg-white border-[3px] border-be-black rounded-[50%] relative flex justify-center items-center overflow-hidden transition-colors duration-500 cursor-pointer active:scale-95" role="button" aria-label="Left eye" tabindex="0" style="contain: layout paint;">
+        <div class="pupil w-[20px] h-[20px] bg-be-black rounded-full absolute transition-pupil" aria-hidden="true"></div>
+        <div class="eyelid absolute top-0 left-0 w-full h-0 bg-be-grey border-b border-be-black z-20 transition-all duration-100" aria-hidden="true"></div>
+      </div>
+      <div class="tear tear-left absolute top-[60px] left-[15px] w-[10px] h-[15px] bg-blue-400 rounded-full opacity-0 pointer-events-none" aria-hidden="true"></div>
+    </div>
+
+    <div class="relative">
+      <div class="eye w-[60px] h-[85px] bg-white border-[3px] border-be-black rounded-[50%] relative flex justify-center items-center overflow-hidden transition-colors duration-500 cursor-pointer active:scale-95" role="button" aria-label="Right eye" tabindex="0" style="contain: layout paint;">
+        <div class="pupil w-[20px] h-[20px] bg-be-black rounded-full absolute transition-pupil" aria-hidden="true"></div>
+        <div class="eyelid absolute top-0 left-0 w-full h-0 bg-be-grey border-b border-be-black z-20 transition-all duration-100" aria-hidden="true"></div>
+      </div>
+      <div class="tear tear-right absolute top-[60px] right-[15px] w-[10px] h-[15px] bg-blue-400 rounded-full opacity-0 pointer-events-none" aria-hidden="true"></div>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  .xeyes-container .eye {
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1);
+  }
+
+  .xeyes-container.dizzy .eye {
+    background-color: #889922 !important;
+  }
+
+  .xeyes-container .transition-pupil {
+    transition: background-color 0.5s, width 0.5s, height 0.5s, box-shadow 0.5s;
+  }
+  
+  .xeyes-container.evil .pupil {
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  
+  .xeyes-container .horn-left, .xeyes-container .horn-right {
+    transform-origin: bottom;
+    transform: translateY(10px) scaleY(0);
+  }
+
+  .xeyes-container.evil .horn-left {
+    opacity: 1 !important;
+    transform: translateY(-25px) scaleY(1) rotate(-15deg) !important;
+  }
+  .xeyes-container.evil .horn-right {
+    opacity: 1 !important;
+    transform: translateY(-25px) scaleY(1) rotate(15deg) !important;
+  }
+
+  .eye-shaking {
+    animation: eye-shake 0.1s infinite !important;
+  }
+
+  @keyframes eye-shake {
+    0% { transform: translate(1px, 1px); }
+    50% { transform: translate(-1px, -1px); }
+    100% { transform: translate(1px, 1px); }
+  }
+
+  .tearing .tear {
+    opacity: 1 !important;
+    animation: tear-fall 1s infinite linear !important;
+  }
+
+  @keyframes tear-fall {
+    0% { transform: translateY(0) scaleX(1); opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translateY(100px) scaleX(0.5); opacity: 0; }
+  }
+
+  .eyelid-blink {
+    height: 100% !important;
+  }
+
+  .ease-back {
+    transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+</style>
+
+<script>
+  import { initXEyes } from "../../scripts/xeyes";
+  const app = document.getElementById("xeyes-app");
+  if (app && !app.dataset.initialized) {
+    app.dataset.initialized = 'true';
+    initXEyes(app);
+
+    const eyelids = app.querySelectorAll('.eyelid');
+    const blink = () => {
+      eyelids.forEach(el => el.classList.add('eyelid-blink'));
+      setTimeout(() => {
+        eyelids.forEach(el => el.classList.remove('eyelid-blink'));
+      }, 150);
+      
+      setTimeout(blink, 2000 + Math.random() * 5000);
+    };
+    setTimeout(blink, 3000);
+
+    app.querySelectorAll('.eye').forEach(eye => {
+      eye.addEventListener('click', () => {
+        eyelids.forEach(el => el.classList.add('eyelid-blink'));
+        setTimeout(() => {
+          eyelids.forEach(el => el.classList.remove('eyelid-blink'));
+        }, 500); 
+      });
+    });
+  }
+</script>

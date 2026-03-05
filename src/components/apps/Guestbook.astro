@@ -1,0 +1,310 @@
+---
+import { Image } from "astro:assets";
+import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const colors = [
+  "#000",
+  "#d32f2f",
+  "#388e3c",
+  "#1976d2",
+  "#f57c00",
+  "#7b1fa2",
+  "#c2185b",
+  "#0097a7",
+];
+---
+<div class="guestbook-app h-full flex flex-col bg-be-grey p-1 select-none" id="guestbook-app" data-lang={lang}>
+  <div class="bg-gradient-to-r from-be-blue to-be-yellow p-1 mb-1 shadow-sm border border-black/20 text-center overflow-hidden flex whitespace-nowrap">
+    <div class="scrolling-text text-[10px] font-bold text-white drop-shadow-md uppercase tracking-widest inline-block px-4">
+      {t('guestbook.sync')} ~~~ Welcome ~~~ Bem-vindo ~~~ ¡Bienvenidos! ~~~ {t('guestbook.sync')} ~~~ Welcome ~~~ Bem-vindo ~~~ ¡Bienvenidos!
+    </div>
+  </div>
+
+  <div class="flex justify-between px-2 py-1 text-[9px] font-mono text-be-shadow uppercase font-bold bg-white/30 mb-1">
+    <div class="flex items-center gap-1">
+      <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse border border-black/40"></div>
+      <span>Guestbook Online</span>
+    </div>
+    <span>VDoF Network v2.1</span>
+  </div>
+
+  <div class="be-inset m-1 bg-[#fff8e1] flex-1 overflow-y-auto custom-scrollbar relative border-2 border-be-shadow" id="entries-list">
+    <div class="p-8 text-center text-be-shadow italic text-xs animate-pulse">
+      <div class="mb-2">⌛</div>
+      {t('guestbook.sync')}
+    </div>
+    <div class="absolute inset-0 pointer-events-none opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+  </div>
+
+  <div class="p-2 flex flex-col gap-2 be-well m-1 bg-[#eeeeee] border-t-white border-l-white">
+    <div class="flex flex-col gap-1">
+      <div class="flex gap-2 items-center">
+        <input 
+          type="text" 
+          id="guest-name" 
+          placeholder={t('guestbook.name_placeholder')}
+          class="be-inset flex-1 px-2 py-1.5 text-[11px] focus:outline-none bg-white border border-be-shadow font-mono"
+        />
+        <div class="flex flex-wrap gap-1 items-center bg-black/5 p-1 border border-be-shadow/30 max-w-[120px]" id="name-color-picker">
+          <span class="text-[7px] font-bold uppercase w-full mb-0.5 opacity-50">{t('guestbook.name_color')}</span>
+          {colors.map(c => (
+            <div class="color-tile w-3.5 h-3.5 rounded-sm border border-black cursor-pointer" style={`background: ${c}`} data-color={c}></div>
+          ))}
+        </div>
+      </div>
+    </div>
+    
+    <div class="flex flex-col gap-1">
+      <div class="flex flex-col gap-1 bg-black/5 p-1 border border-be-shadow/30 mb-1">
+        <div class="flex flex-wrap gap-1 items-center border-b border-be-shadow/20 pb-1" id="text-color-picker">
+          <span class="text-[7px] font-bold uppercase mr-2 opacity-50">{t('guestbook.color_tags')}</span>
+          <div class="flex flex-wrap gap-1">
+            {colors.map(c => (
+              <div class="color-tile w-4 h-4 rounded-sm border border-black cursor-pointer hover:scale-110 transition-transform" style={`background: ${c}`} data-color={c}></div>
+            ))}
+          </div>
+        </div>
+        
+        <div class="flex flex-wrap gap-1 py-0.5" id="emoticon-bar">
+          <span class="text-[7px] font-bold uppercase mr-2 opacity-50 self-center">{t('guestbook.mood')}</span>
+          <div class="flex flex-wrap gap-1 flex-1">
+            {[':-)',':-D',';-)',':-P','B-)','<3',':-O','(Y)',':-*','X-D'].map(e => (
+              <button class="be-button !px-2 !py-0.5 text-[10px] font-mono hover:!bg-be-yellow transition-colors whitespace-nowrap min-w-[30px]">{e}</button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <textarea 
+        id="guest-msg" 
+        placeholder={t('guestbook.placeholder')}
+        class="be-inset flex-1 px-2 py-1.5 text-[11px] focus:outline-none h-20 bg-white resize-none border border-be-shadow font-mono leading-tight"
+      ></textarea>
+      
+      <div class="flex gap-1 mt-1">
+        <button id="clear-btn" class="be-button !px-3 text-[10px] uppercase font-bold opacity-60">{t('guestbook.clear')}</button>
+        <button id="send-btn" class="be-button !bg-be-yellow !flex-1 !flex flex-row items-center justify-center py-2 text-[11px] uppercase font-bold gap-3 group">
+          <Image src="/img/16x16/send.png" alt="Send" width={20} height={20} class="w-5 h-5 object-contain group-hover:-translate-y-1 transition-transform" />
+          <span class="mt-[1px]">{t('guestbook.submit')}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { ui } from "../../i18n/ui";
+  const root = document.getElementById('guestbook-app')!;
+  const lang = (root.getAttribute('data-lang') || 'pt-br') as keyof typeof ui;
+  const t = (key: string) => (ui[lang] as any)[key] || (ui['pt-br'] as any)[key];
+
+  const entriesList = root.querySelector('#entries-list');
+  const nameInput = root.querySelector('#guest-name') as HTMLInputElement;
+  const msgInput = root.querySelector('#guest-msg') as HTMLTextAreaElement;
+  const sendBtn = root.querySelector('#send-btn') as HTMLButtonElement;
+  const clearBtn = root.querySelector('#clear-btn');
+  const nameColorPicker = root.querySelector('#name-color-picker');
+  const textColorPicker = root.querySelector('#text-color-picker');
+  const emoticonBar = root.querySelector('#emoticon-bar');
+  
+  let selectedNameColor = '#000';
+
+  emoticonBar?.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      insertAtCursor(msgInput, btn.textContent!);
+    });
+  });
+
+  nameColorPicker?.querySelectorAll('.color-tile').forEach(tile => {
+    if (tile.getAttribute('data-color') === selectedNameColor) {
+      tile.classList.add('active');
+    }
+    tile.addEventListener('click', () => {
+      nameColorPicker.querySelectorAll('.color-tile').forEach(t => t.classList.remove('active'));
+      tile.classList.add('active');
+      selectedNameColor = tile.getAttribute('data-color')!;
+      nameInput.style.color = selectedNameColor;
+    });
+  });
+
+  textColorPicker?.querySelectorAll('.color-tile').forEach(tile => {
+    tile.addEventListener('click', () => {
+      const color = tile.getAttribute('data-color')!;
+      wrapSelection(msgInput, `[c=${color}]`, `[/c]`);
+    });
+  });
+
+  function insertAtCursor(myField: HTMLTextAreaElement | HTMLInputElement, myValue: string) {
+    const startPos = myField.selectionStart;
+    const endPos = myField.selectionEnd;
+    
+    if (startPos !== null && endPos !== null) {
+      myField.value = myField.value.substring(0, startPos) + myValue + myField.value.substring(endPos, myField.value.length);
+      myField.selectionStart = startPos + myValue.length;
+      myField.selectionEnd = startPos + myValue.length;
+    } else {
+      myField.value += myValue;
+    }
+    myField.focus();
+  }
+
+  function wrapSelection(myField: HTMLTextAreaElement, before: string, after: string) {
+    const startPos = myField.selectionStart;
+    const endPos = myField.selectionEnd;
+    
+    if (startPos !== null && endPos !== null) {
+      const selectedText = myField.value.substring(startPos, endPos);
+      const replacement = before + selectedText + after;
+      myField.value = myField.value.substring(0, startPos) + replacement + myField.value.substring(endPos, myField.value.length);
+      myField.focus();
+      myField.selectionStart = startPos + before.length;
+      myField.selectionEnd = startPos + before.length + selectedText.length;
+    } else {
+      myField.value = before + myField.value + after;
+      myField.focus();
+    }
+  }
+
+  clearBtn?.addEventListener('click', () => {
+    msgInput.value = '';
+    nameInput.value = '';
+  });
+
+  async function load() {
+    try {
+      const res = await fetch('/api/guestbook');
+      const entries = await res.json();
+      
+      if (entriesList) {
+        if (!Array.isArray(entries) || entries.length === 0) {
+          entriesList.innerHTML = `
+            <div class="flex flex-col items-center justify-center h-full p-8 text-be-shadow/40 italic">
+              <span class="text-4xl mb-4 grayscale opacity-30">📪</span>
+              <p class="text-xs">${t('guestbook.no_messages')}</p>
+            </div>`;
+          return;
+        }
+        
+        entriesList.innerHTML = entries.map((e: any) => `
+          <div class="p-4 border-b border-be-shadow/10 bg-white/40 hover:bg-white/60 transition-colors group relative overflow-hidden">
+            <div class="flex justify-between items-baseline mb-1 relative z-10">
+              <div class="flex items-center gap-2">
+                <div class="w-1.5 h-1.5 rounded-full" style="background: ${e.color || '#000'}"></div>
+                <span class="font-bold text-[12px] uppercase tracking-tight" style="color: ${e.color || '#000'}">${e.name}</span>
+              </div>
+              <span class="text-[8px] text-be-shadow font-mono opacity-60">${e.date}</span>
+            </div>
+            <div class="text-[11px] leading-snug text-be-black break-words font-mono relative z-10">${formatMsg(e.msg)}</div>
+            <div class="absolute -right-2 -bottom-2 w-8 h-8 bg-be-yellow/5 rounded-full group-hover:scale-150 transition-transform"></div>
+          </div>
+        `).join('');
+      }
+    } catch (e) {
+      console.error("Failed to load guestbook entries", e);
+      if (entriesList) {
+        entriesList.innerHTML = `<div class="p-8 text-center text-red-600 font-bold">${t('guestbook.critical_error')}</div>`;
+      }
+    }
+  }
+
+  function formatMsg(msg: string) {
+    const div = document.createElement('div');
+    div.textContent = msg;
+    let escaped = div.innerHTML;
+    
+    const colorRegex = /\[c=([^\]]+)\](.*?)\[\/c\]/g;
+    escaped = escaped.replace(colorRegex, (_, color, text) => {
+      return `<span style="color: ${color}">${text}</span>`;
+    });
+
+    const emojis: Record<string, string> = {
+      ':-)': '<b>:-)</b>',
+      ':-D': '<b>:-D</b>',
+      '<3': '<span class="text-red-600">❤</span>',
+      '(Y)': '<span class="text-blue-600">👍</span>',
+    };
+    
+    for (const key of Object.keys(emojis)) {
+      escaped = escaped.replaceAll(key, emojis[key]);
+    }
+    
+    return escaped;
+  }
+
+  sendBtn?.addEventListener('click', async () => {
+    const name = nameInput.value.trim();
+    const msg = msgInput.value.trim();
+    if (!msg) return;
+
+    sendBtn.disabled = true;
+    const originalContent = sendBtn.innerHTML;
+    sendBtn.textContent = t('guestbook.sending');
+
+    try {
+      const res = await fetch('/api/guestbook', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: name || t('guestbook.anonymous'),
+          msg: msg,
+          color: selectedNameColor
+        })
+      });
+
+      if (res.ok) {
+        msgInput.value = '';
+        await load();
+        entriesList?.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    } catch (e) {
+      console.error("Failed to send guestbook entry", e);
+      alert(t('guestbook.error'));
+    } finally {
+      sendBtn.disabled = false;
+      sendBtn.innerHTML = originalContent;
+    }
+  });
+
+  if (root && !root.dataset.initialized) {
+    root.dataset.initialized = 'true';
+    load();
+  }
+</script>
+
+<style>
+  .scrolling-text {
+    animation: scroll-left 20s linear infinite;
+  }
+
+  @keyframes scroll-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .color-tile {
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+  .color-tile:hover {
+    transform: scale(1.2);
+    z-index: 10;
+  }
+  .color-tile.active {
+    box-shadow: 0 0 0 1px var(--be-black), 0 0 0 2px var(--be-yellow);
+    transform: scale(1.1);
+  }
+  
+  #entries-list {
+    background-image: 
+      linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+</style>

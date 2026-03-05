@@ -1,0 +1,44 @@
+---
+import BeWindow from "../core/BeWindow.astro";
+import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<BeWindow
+  id="credits"
+  title={t("nav.credits")}
+  width="280px"
+  height="auto"
+  top="400px"
+  left="700px"
+>
+  <div class="space-y-3 text-xs leading-relaxed">
+    <div>
+      <h3 class="font-bold text-sm">{t("credits.title")}</h3>
+      <p class="text-[10px] text-be-shadow">
+        {t("credits.subtitle")}
+      </p>
+    </div>
+
+    <div class="space-y-1">
+      <p>
+        <b>{t("credits.author")}:</b>
+        <a
+          href="https://codeberg.org/viniciusdof"
+          target="_blank"
+          class="text-be-link font-bold hover:underline">@viniciusdof</a
+        >
+      </p>
+      <p>
+        <b>{t("credits.icons")}:</b>
+        <a
+          href="https://github.com/jcherven/BeOS-r5-Icons"
+          target="_blank"
+          class="text-be-link font-bold hover:underline">BeOS r5 Icons</a
+        >
+      </p>
+    </div>
+  </div>
+</BeWindow>

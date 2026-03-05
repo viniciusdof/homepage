@@ -1,0 +1,119 @@
+---
+import "../styles/global.css";
+import Deskbar from "../components/desktop/Deskbar.astro";
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+
+interface Props {
+  title?: string;
+}
+
+const { title = "BeOS Linktree" } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const description = t("site.description");
+const ogImage = new URL("/favicon.png", Astro.url);
+---
+
+<!doctype html>
+<html lang={lang} class="h-full w-full overflow-hidden">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={Astro.url} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={ogImage} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body class="h-full w-full overflow-hidden select-none bg-be-blue beos-desktop">
+    <div id="desktop" class="relative h-full w-full overflow-hidden">
+      <Deskbar />
+      <main class="desktop h-full w-full relative p-[10px] sm:p-[20px] pt-[60px] flex flex-col sm:block gap-4 overflow-y-auto sm:overflow-hidden">
+        <slot />
+      </main>
+    </div>
+
+    <script>
+      import "../scripts/windowManager.ts";
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  .beos-desktop {
+    background-color: var(--be-blue);
+    background-image: radial-gradient(var(--be-black) 1px, transparent 0);
+    background-size: 4px 4px;
+    background-position: 0 0, 2px 2px;
+  }
+
+  @media (max-width: 640px) {
+    .desktop {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      grid-template-rows: repeat(auto-fill, minmax(90px, 1fr));
+      align-content: start;
+      justify-items: center;
+      padding-top: 70px !important;
+      gap: 10px;
+    }
+
+    .be-window:not(.panic-window) {
+      width: 94vw !important;
+      left: 3vw !important;
+      top: 80px !important;
+      height: auto !important;
+      max-height: 75vh;
+      position: fixed !important;
+    }
+
+    .panic-window {
+      position: absolute !important;
+      box-shadow: 10px 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .desktop-icon {
+      position: relative !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      margin: 0 !important;
+      width: 70px !important;
+      height: 80px !important;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .desktop-icon img {
+      width: 32px;
+      height: 32px;
+    }
+
+    .desktop-icon span {
+      font-size: 10px;
+      text-align: center;
+      margin-top: 4px;
+      background: rgba(0,0,0,0.5);
+      padding: 0 4px;
+      border-radius: 2px;
+    }
+  }
+</style>

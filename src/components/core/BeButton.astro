@@ -1,0 +1,22 @@
+---
+interface Props {
+  id?: string;
+  class?: string;
+  href?: string;
+  target?: string;
+  [key: string]: any;
+}
+
+const { id, class: className, href, target, ...rest } = Astro.props;
+const Tag = href ? "a" : "button";
+---
+
+<Tag
+  id={id}
+  href={href}
+  target={target}
+  class:list={["be-button", className]}
+  {...rest}
+>
+  <slot />
+</Tag>

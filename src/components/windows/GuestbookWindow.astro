@@ -1,0 +1,19 @@
+---
+import BeWindow from "../core/BeWindow.astro";
+import Guestbook from "../apps/Guestbook.astro";
+import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<BeWindow
+  id="guestbook"
+  title={t("guestbook.title")}
+  width="350px"
+  height="450px"
+  top="100px"
+  left="800px"
+>
+  <Guestbook />
+</BeWindow>

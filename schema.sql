@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS entries (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  msg TEXT NOT NULL,
+  color TEXT,
+  date TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS stats (
+  key TEXT PRIMARY KEY,
+  value INTEGER DEFAULT 0
+);
+
+INSERT OR IGNORE INTO stats (key, value) VALUES ('visitors', 0);

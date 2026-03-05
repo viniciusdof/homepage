@@ -1,0 +1,23 @@
+---
+import BeWindow from "../core/BeWindow.astro";
+import BeButton from "../core/BeButton.astro";
+import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<BeWindow
+  id="socials"
+  title={t("nav.socials")}
+  width="250px"
+  height="auto"
+  top="150px"
+  left="450px"
+>
+  <div class="space-y-2">
+    <BeButton href="https://bsky.app/profile/viniciusdof.com" target="_blank" class="text-xs">&bull; Bluesky</BeButton>
+    <BeButton href="https://x.com/viniciusdof" target="_blank" class="text-xs">&bull; Twitter</BeButton>
+    <BeButton href="https://instagram.com/viniciusdof" target="_blank" class="text-xs">&bull; Instagram</BeButton>
+  </div>
+</BeWindow>

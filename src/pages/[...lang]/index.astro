@@ -1,0 +1,55 @@
+---
+import DesktopLayout from "../../layouts/DesktopLayout.astro";
+import DesktopIcon from "../../components/desktop/DesktopIcon.astro";
+
+import AboutWindow from "../../components/windows/AboutWindow.astro";
+import SocialsWindow from "../../components/windows/SocialsWindow.astro";
+import MusicWindow from "../../components/windows/MusicWindow.astro";
+import XEyesWindow from "../../components/windows/XEyesWindow.astro";
+import GuestbookWindow from "../../components/windows/GuestbookWindow.astro";
+import StatsWindow from "../../components/windows/StatsWindow.astro";
+import CreditsWindow from "../../components/windows/CreditsWindow.astro";
+import TrashWindow from "../../components/windows/TrashWindow.astro";
+
+import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<DesktopLayout title="@viniciusdof">
+  <DesktopIcon id="about" label={t("nav.profile")} icon="/img/32x32/profile.png" top="60px" left="20px" />
+  <DesktopIcon id="socials" label={t("nav.socials")} icon="/img/32x32/socials.png" top="140px" left="20px" />
+  <DesktopIcon id="music" label={t("nav.music")} icon="/img/32x32/cdplayer.png" top="220px" left="20px" />
+  <DesktopIcon id="xeyes" label={t("nav.xeyes")} icon="/img/32x32/xeyes.png" top="300px" left="20px" />
+  <DesktopIcon id="guestbook" label={t("nav.guestbook")} icon="/img/32x32/guestbook.png" top="380px" left="20px" />
+  
+  <DesktopIcon id="stats" label={t("nav.stats")} icon="/img/32x32/stats.png" top="60px" right="20px" />
+  <DesktopIcon id="credits" label={t("nav.credits")} icon="/img/32x32/credits.png" top="140px" right="20px" />
+  <DesktopIcon id="trash" label={t("nav.trash")} icon="/img/32x32/trash.png" top="auto" bottom="20px" left="auto" right="10px" />
+
+  <AboutWindow />
+  <SocialsWindow />
+  <MusicWindow />
+  <XEyesWindow />
+  <GuestbookWindow />
+  <StatsWindow />
+  <CreditsWindow />
+  <TrashWindow />
+
+  <script>
+    import { openWindow } from "../../scripts/windowManager";
+    import { triggerPanic } from "../../scripts/panicMode";
+
+    if (window.innerWidth > 640) {
+      openWindow("about");
+    }
+
+    document.addEventListener("click", (e) => {
+      const target = e.target as HTMLElement;
+      if (target.closest('[data-window="panic"]')) {
+        triggerPanic();
+      }
+    });
+  </script>
+</DesktopLayout>

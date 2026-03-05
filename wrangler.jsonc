@@ -1,0 +1,32 @@
+{
+  "main": "dist/_worker.js/index.js",
+  "name": "homepage",
+  "compatibility_date": "2026-02-28",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "./dist"
+  },
+  "observability": {
+    "enabled": true
+  },
+  "routes": [
+    { "pattern": "viniciusdof.com", "custom_domain": true },
+    { "pattern": "www.viniciusdof.com", "custom_domain": true },
+    { "pattern": "viniciusdof.com.br", "custom_domain": true },
+    { "pattern": "www.viniciusdof.com.br", "custom_domain": true },
+    { "pattern": "vinicius.gay", "custom_domain": true },
+    { "pattern": "www.vinicius.gay", "custom_domain": true },
+    { "pattern": "vinicius.lol", "custom_domain": true },
+    { "pattern": "www.vinicius.lol", "custom_domain": true },
+    { "pattern": "vinicius.wtf", "custom_domain": true },
+    { "pattern": "www.vinicius.wtf", "custom_domain": true }
+  ],
+  "d1_databases": [
+    {
+      "binding": "guestbook_db",
+      "database_name": "guestbook-db",
+      "database_id": "f185b54e-7566-4b7a-8b5c-f3889422eb41"
+    }
+  ]
+}

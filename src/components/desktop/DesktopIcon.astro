@@ -1,0 +1,39 @@
+---
+import { Image } from "astro:assets";
+
+interface Props {
+  id: string;
+  label: string;
+  icon?: string;
+  top?: string;
+  left?: string;
+  right?: string;
+  bottom?: string;
+}
+
+const {
+  id,
+  label,
+  icon = "/favicon.svg",
+  top = "auto",
+  left = "auto",
+  right = "auto",
+  bottom = "auto",
+} = Astro.props;
+---
+
+<div
+  class="desktop-icon absolute inline-flex flex-col items-center w-[70px] m-[10px] cursor-pointer text-center group outline-none"
+  style={`top: ${top}; left: ${left}; right: ${right}; bottom: ${bottom};`}
+  data-window={id}
+  role="button"
+  aria-label={label}
+  tabindex="0"
+>
+  <div class="w-[32px] h-[32px] mb-[5px] flex items-center justify-center">
+    <Image src={icon} alt={label} width={32} height={32} class="w-[32px] h-[32px] group-active:brightness-50 transition-all" loading="eager" />
+  </div>
+  <span class="text-white bg-black/50 px-1 py-[1px] rounded-[3px] break-words text-[12px] leading-tight select-none">
+    {label}
+  </span>
+</div>

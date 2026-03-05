@@ -1,0 +1,22 @@
+import type { APIRoute } from "astro";
+
+export const GET: APIRoute = async () => {
+  try {
+    const targetUrl = `https://bandfeed.viniciusdof.com/v1/user/viniciusdof/collection`;
+    const response = await fetch(targetUrl);
+    const data = await response.json();
+
+    return new Response(JSON.stringify(data), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "public, max-age=3600",
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    return new Response(JSON.stringify({ error: "Failed to fetch collection from Bandfeed" }), {
+      status: 500,
+    });
+  }
+};

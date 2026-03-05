@@ -1,0 +1,387 @@
+---
+import { Image } from "astro:assets";
+import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+<div class="audio-player h-full flex flex-col bg-be-grey p-1 select-none font-sans" id="audio-player" data-lang={lang}>
+  <div class="flex justify-between px-2 py-0.5 bg-be-shadow/10 mb-1 border-b border-be-shadow/20">
+    <div class="flex items-center gap-1">
+      <div class="w-1.5 h-1.5 bg-red-600 border border-black shadow-[0_0_2px_red]"></div>
+      <span class="text-[8px] font-bold uppercase tracking-widest text-be-shadow">Personal Audio BP-500</span>
+    </div>
+    <span class="text-[7px] font-mono text-be-shadow font-bold italic">anti-shock memory</span>
+  </div>
+
+  <div class="flex flex-col gap-2 p-1">
+    <div class="bg-black p-2 h-24 flex flex-col justify-between relative overflow-hidden group border border-black shadow-[inset_2px_2px_5px_black,1px_1px_white]">
+      <div class="flex justify-between items-start z-10 h-full">
+        <div class="flex flex-col justify-between h-full flex-1 min-w-0">
+          <div class="flex flex-col">
+            <span class="text-[7px] text-be-yellow/70 font-mono uppercase leading-tight">{t('player.album_artist')}</span>
+            <div class="max-w-[180px] overflow-hidden whitespace-nowrap">
+              <div id="lcd-meta" class="text-[10px] font-mono text-be-yellow drop-shadow-[0_0_1px_rgba(254,211,0,0.5)] inline-block" style="contain: layout paint;">{t('player.ready')}</div>
+            </div>
+          </div>
+          
+          <div class="flex flex-col">
+            <div class="max-w-[180px] overflow-hidden whitespace-nowrap">
+              <div id="lcd-track-title" class="text-xs font-mono text-be-yellow font-bold drop-shadow-[0_0_2px_rgba(254,211,0,0.4)] inline-block" style="contain: layout paint;">{t('player.waiting')}</div>
+            </div>
+            <div class="flex items-center gap-4">
+              <span id="lcd-time" class="text-lg font-mono text-be-yellow leading-none tracking-tighter drop-shadow-[0_0_3px_rgba(254,211,0,0.6)]" style="contain: layout paint; min-width: 50px;">00:00</span>
+              <div class="flex gap-1">
+                 <div id="led-play" class="w-1.5 h-1.5 rounded-full bg-be-yellow/10 border border-black shadow-[inset_1px_1px_rgba(0,0,0,0.5)]"></div>
+                 <div id="led-pause" class="w-1.5 h-1.5 rounded-full bg-be-yellow/10 border border-black shadow-[inset_1px_1px_rgba(0,0,0,0.5)]"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col items-end gap-2 ml-2">
+          <div class="flex flex-col items-end">
+            <span class="text-[7px] text-be-yellow/70 font-mono uppercase leading-tight">{t('player.track')}</span>
+            <span id="lcd-track" class="text-xl font-mono font-bold text-be-yellow leading-none drop-shadow-[0_0_3px_rgba(254,211,0,0.6)]" style="contain: layout paint; min-width: 25px; text-align: right;">00</span>
+          </div>
+          
+          <div class="flex flex-col items-end">
+            <span class="text-[6px] text-be-yellow/50 font-mono uppercase mb-1">{t('player.volume').substring(0, 3)}</span>
+            <div id="vol-bars" class="flex gap-[1px] items-end h-8">
+              {Array.from({length: 10}).map((_, i) => (
+                <div class="w-[3px] bg-be-yellow/10 border-[0.5px] border-black indicator-bar" style={`height: ${(i + 1) * 10}%`}></div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(254,211,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(254,211,0,0.02)_1px,transparent_1px)] bg-[size:4px_4px] pointer-events-none"></div>
+    </div>
+
+    <div class="flex gap-1 justify-center">
+      <button id="btn-prev" class="be-button !p-1 flex-1 flex items-center justify-center" title="Previous">
+        <Image src="/img/16x16/prev.png" alt="Prev" width={16} height={16} class="w-4 h-4" />
+      </button>
+
+      <button id="btn-play-pause" class="be-button !p-1 flex-[2] flex items-center justify-center group" title="Play/Pause">
+        <Image id="img-play" src="/img/16x16/play.png" alt="Play" width={16} height={16} class="w-4 h-4" />
+        <Image id="img-pause" src="/img/16x16/pause.png" alt="Pause" width={16} height={16} class="w-4 h-4 hidden" />
+      </button>
+
+      <button id="btn-next" class="be-button !p-1 flex-1 flex items-center justify-center" title="Next">
+        <Image src="/img/16x16/next.png" alt="Next" width={16} height={16} class="w-4 h-4" />
+      </button>
+    </div>
+    <div class="flex items-center gap-1 be-well bg-be-grey/50 p-1">
+      <button id="vol-down" class="be-button !p-1 w-8 font-bold">-</button>
+      <div class="flex-1 text-center font-mono text-[9px] font-bold text-be-shadow uppercase tracking-tighter">{t('player.volume')}</div>
+      <button id="vol-up" class="be-button !p-1 w-8 font-bold">+</button>
+    </div>
+  </div>
+
+  <div class="flex flex-col flex-1 min-h-0 p-1 gap-1">
+    <div class="be-inset bg-white flex-1 overflow-y-auto custom-scrollbar">
+      <div id="playlist" class="flex flex-col divide-y divide-be-grey/50">
+        <div class="p-4 text-center text-be-shadow italic text-[10px]">{t('player.waiting')}</div>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1 mt-1">
+      <div class="px-2 py-0.5 text-[7px] text-be-shadow font-bold uppercase leading-tight">{t('player.collection')}</div>
+      <a id="buy-btn" href="#" target="_blank" class="be-button !bg-be-yellow/80 !flex flex-row items-center justify-center py-2 flex-1 text-[10px] uppercase font-bold gap-3" title={t('player.buy_tooltip')}>
+        <Image src="/img/32x32/buy.png" alt="Buy" width={24} height={24} class="w-6 h-6 object-contain" />
+        <span class="mt-[2px]">{t('player.buy')}</span>
+      </a>
+    </div>
+  </div>
+
+  <audio id="audio-engine" class="hidden"></audio>
+</div>
+
+<script>
+  import { ui } from "../../i18n/ui";
+
+  interface Track {
+    title: string;
+    url: string;
+    number?: number;
+  }
+
+  interface Album {
+    title: string;
+    artist: string;
+    url: string;
+    tracks?: Track[];
+  }
+
+  const root = document.getElementById('audio-player')!;
+  const lang = (root.getAttribute('data-lang') || 'pt-br') as keyof typeof ui;
+  const t = (key: string) => (ui[lang] as any)[key] || (ui['pt-br'] as any)[key];
+
+  const audio = root.querySelector('#audio-engine') as HTMLAudioElement;
+  const lcdTrack = root.querySelector('#lcd-track')!;
+  const lcdTime = root.querySelector('#lcd-time')!;
+  const lcdMeta = root.querySelector('#lcd-meta') as HTMLElement;
+  const lcdTitle = root.querySelector('#lcd-track-title') as HTMLElement;
+  const playlistEl = root.querySelector('#playlist')!;
+  const volUp = root.querySelector('#vol-up')!;
+  const volDown = root.querySelector('#vol-down')!;
+  const volBars = root.querySelector('#vol-bars')!;
+  const ledPlay = root.querySelector('#led-play')!;
+  const ledPause = root.querySelector('#led-pause')!;
+  const buyBtn = root.querySelector('#buy-btn') as HTMLAnchorElement;
+
+  let collection: Album[] = [];
+  let currentTracks: Track[] = [];
+  let currentTrackIdx = 0;
+  let currentVolume = 0.8;
+
+  async function init() {
+    updateVolumeUI();
+    try {
+      const res = await fetch('/api/music/collection');
+      const data = await res.json();
+      collection = Array.isArray(data.collection) ? data.collection : [];
+      if (collection.length > 0) {
+        loadRandomAlbum();
+      }
+    } catch (e) {
+      console.error("Failed to fetch music collection", e);
+      setLcdText(lcdTitle, t('player.error'));
+    }
+  }
+
+  function setLcdText(el: HTMLElement, text: string) {
+    let target = el as any;
+    if (!el.shadowRoot) {
+      const shadow = el.attachShadow({ mode: 'open' });
+      const span = document.createElement('span');
+      span.id = 'inner';
+      span.style.fontFamily = 'inherit';
+      shadow.appendChild(span);
+    }
+    const inner = el.shadowRoot!.getElementById('inner')!;
+    
+    if (inner.textContent === text) return;
+    inner.textContent = text;
+    el.style.animation = 'none';
+    
+    setTimeout(() => {
+      const parent = el.parentElement!;
+      if (inner.scrollWidth > parent.clientWidth) {
+        const diff = inner.scrollWidth - parent.clientWidth;
+        const duration = Math.max(3, diff / 20);
+        el.style.setProperty('--scroll-dist', `-${diff}px`);
+        el.style.animation = `lcd-scroll ${duration}s linear infinite alternate`;
+      }
+    }, 50);
+  }
+
+  function loadRandomAlbum() {
+    const album = collection[Math.floor(Math.random() * collection.length)];
+    loadAlbum(album);
+  }
+
+  async function loadAlbum(album: Album) {
+    setLcdText(lcdTitle, t('player.reading'));
+    buyBtn.href = album.url;
+    
+    try {
+      const parsedUrl = new URL(album.url);
+      const subdomain = parsedUrl.hostname.split('.')[0];
+      const parts = parsedUrl.pathname.split('/');
+
+      const res = await fetch(`/api/music/album/${subdomain}/${parts[1]}/${parts[2]}`);
+      const data = await res.json();
+      
+      currentTracks = data.tracks || [data];
+      currentTrackIdx = 0;
+      
+      setLcdText(lcdMeta, `${data.artist} - ${data.title}`);
+      renderPlaylist();
+      
+      const track = currentTracks[0];
+      if (track?.url) {
+        audio.src = track.url;
+        setSimpleText(lcdTrack as HTMLElement, "01");
+        setLcdText(lcdTitle, t('player.ready'));
+        updateTransportUI();
+      }
+    } catch (e) {
+      console.error("Failed to load album", e);
+    }
+  }
+
+  function renderPlaylist() {
+    playlistEl.innerHTML = currentTracks.map((t, i) => `
+      <div class="playlist-item p-1.5 flex gap-2 items-center hover:bg-be-blue hover:text-white cursor-pointer text-[10px] font-mono ${i === currentTrackIdx ? 'bg-be-blue text-white' : ''}" data-idx="${i}">
+        <span class="w-4 text-center opacity-50">${t.number || i+1}</span>
+        <span class="flex-1 truncate">${t.title}</span>
+      </div>
+    `).join('');
+
+    root.querySelectorAll('.playlist-item').forEach(el => {
+      el.addEventListener('click', () => {
+        currentTrackIdx = parseInt(el.getAttribute('data-idx')!);
+        const track = currentTracks[currentTrackIdx];
+        if (track?.url) {
+          audio.src = track.url;
+          audio.play().catch(e => console.error("Playback blocked", e));
+        }
+      });
+    });
+  }
+
+  function updateTransportUI() {
+    const isPlaying = !audio.paused;
+    
+    root.querySelector('#img-play')!.classList.toggle('hidden', isPlaying);
+    root.querySelector('#img-pause')!.classList.toggle('hidden', !isPlaying);
+    
+    ledPlay.classList.toggle('bg-be-yellow', isPlaying);
+    ledPlay.classList.toggle('shadow-[0_0_5px_#f5c242]', isPlaying);
+    ledPause.classList.toggle('bg-be-yellow', !isPlaying);
+    ledPause.classList.toggle('shadow-[0_0_5px_#f5c242]', !isPlaying);
+
+    if (isPlaying) {
+      const track = currentTracks[currentTrackIdx];
+      if (track) {
+        setLcdText(lcdTitle, track.title);
+      }
+    } else if (audio.currentTime === 0) {
+      setLcdText(lcdTitle, t('player.ready'));
+    } else {
+      setLcdText(lcdTitle, t('player.paused'));
+    }
+  }
+
+  function updateVolumeUI() {
+    audio.volume = currentVolume;
+    const bars = volBars.querySelectorAll('.indicator-bar');
+    const activeCount = Math.round(currentVolume * 10);
+    
+    bars.forEach((bar: any, i) => {
+      if (i < activeCount) {
+        bar.style.backgroundColor = '#fed300';
+        bar.style.boxShadow = '0 0 3px rgba(254,211,0,0.6)';
+      } else {
+        bar.style.backgroundColor = 'rgba(254,211,0,0.1)';
+        bar.style.boxShadow = 'none';
+      }
+    });
+  }
+
+  root.querySelector('#btn-play-pause')!.addEventListener('click', () => {
+    if (audio.paused) {
+      if (audio.src) {
+        audio.play().catch(e => console.error("Playback failed", e));
+      }
+    } else {
+      audio.pause();
+    }
+  });
+
+  audio.addEventListener('play', updateTransportUI);
+  audio.addEventListener('pause', updateTransportUI);
+
+  root.querySelector('#btn-next')!.addEventListener('click', () => {
+    if (currentTrackIdx < currentTracks.length - 1) {
+      currentTrackIdx++;
+      const track = currentTracks[currentTrackIdx];
+      if (track?.url) {
+        audio.src = track.url;
+        audio.play().catch(e => console.error("Playback blocked", e));
+        const newTrackNum = (currentTrackIdx + 1).toString().padStart(2, '0');
+        setSimpleText(lcdTrack as HTMLElement, newTrackNum);
+        renderPlaylist();
+      }
+    }
+  });
+
+  root.querySelector('#btn-prev')!.addEventListener('click', () => {
+    if (currentTrackIdx > 0) {
+      currentTrackIdx--;
+      const track = currentTracks[currentTrackIdx];
+      if (track?.url) {
+        audio.src = track.url;
+        audio.play().catch(e => console.error("Playback blocked", e));
+        const newTrackNum = (currentTrackIdx + 1).toString().padStart(2, '0');
+        setSimpleText(lcdTrack as HTMLElement, newTrackNum);
+        renderPlaylist();
+      }
+    }
+  });
+
+  volUp.addEventListener('click', () => {
+    currentVolume = Math.min(1, currentVolume + 0.1);
+    updateVolumeUI();
+  });
+
+  volDown.addEventListener('click', () => {
+    currentVolume = Math.max(0, currentVolume - 0.1);
+    updateVolumeUI();
+  });
+
+  function setSimpleText(el: HTMLElement, text: string) {
+    if (!el.shadowRoot) {
+      const shadow = el.attachShadow({ mode: 'open' });
+      const span = document.createElement('span');
+      span.id = 'inner';
+      shadow.appendChild(span);
+    }
+    const inner = el.shadowRoot!.getElementById('inner')!;
+    if (inner.textContent !== text) {
+      inner.textContent = text;
+    }
+  }
+
+  audio.addEventListener('timeupdate', () => {
+    const m = Math.floor(audio.currentTime / 60);
+    const s = Math.floor(audio.currentTime % 60);
+    const timeStr = `${m}:${s.toString().padStart(2, '0')}`;
+    setSimpleText(lcdTime as HTMLElement, timeStr);
+  });
+
+  audio.addEventListener('ended', () => {
+    if (currentTrackIdx < currentTracks.length - 1) {
+      currentTrackIdx++;
+      const track = currentTracks[currentTrackIdx];
+      if (track?.url) {
+        audio.src = track.url;
+        audio.play().catch(e => console.error("Playback blocked", e));
+        const newTrackNum = (currentTrackIdx + 1).toString().padStart(2, '0');
+        setSimpleText(lcdTrack as HTMLElement, newTrackNum);
+        renderPlaylist();
+      }
+    }
+  });
+
+  const parentWindow = root.closest('.be-window');
+  if (parentWindow) {
+    parentWindow.addEventListener('window-closed', () => {
+      audio.pause();
+      currentTracks = [];
+      setLcdText(lcdTitle, t('player.ejected'));
+      setLcdText(lcdMeta, t('player.waiting'));
+      setSimpleText(lcdTrack as HTMLElement, "00");
+      if (collection.length > 0) {
+        loadRandomAlbum();
+      }
+    });
+  }
+
+  if (root && !root.dataset.initialized) {
+    root.dataset.initialized = 'true';
+    init();
+  }
+</script>
+
+<style is:global>
+  @keyframes lcd-scroll {
+    0% { transform: translateX(0); }
+    10% { transform: translateX(0); }
+    90% { transform: translateX(var(--scroll-dist)); }
+    100% { transform: translateX(var(--scroll-dist)); }
+  }
+</style>

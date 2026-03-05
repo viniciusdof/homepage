@@ -1,0 +1,19 @@
+---
+import BeWindow from "../core/BeWindow.astro";
+import CDPlayer from "../apps/CDPlayer.astro";
+import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<BeWindow
+  id="music"
+  title={t("nav.music")}
+  width="340px"
+  height="450px"
+  top="250px"
+  left="400px"
+>
+  <CDPlayer />
+</BeWindow>

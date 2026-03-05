@@ -1,0 +1,28 @@
+{
+  "name": "homepage",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check",
+    "lint": "biome lint .",
+    "format": "biome format . --write"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.6",
+    "@astrojs/cloudflare": "^12.6.12",
+    "@fontsource/arimo": "^5.2.8",
+    "@fontsource/courier-prime": "^5.2.8",
+    "@tailwindcss/vite": "^4.2.1",
+    "astro": "^5.17.1",
+    "tailwindcss": "^4.2.1",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.6",
+    "wrangler": "^4.69.0"
+  }
+}

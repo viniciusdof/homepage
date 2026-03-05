@@ -1,0 +1,117 @@
+---
+import { Image } from "astro:assets";
+import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+import { languages } from "../../i18n/ui";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+<div id="deskbar" class="fixed top-0 right-0 w-[160px] bg-be-grey border-l border-b border-be-black p-1 z-[1000] flex items-center gap-[5px] shadow-[inset_1px_1px_var(--be-white),0_2px_5px_rgba(0,0,0,0.2)] h-[40px]">
+  <div class="deskbar-tray bg-[#f0f0f0] border border-be-shadow shadow-[inset_1px_1px_var(--be-black)] h-[32px] flex-grow flex items-center justify-center px-2 overflow-hidden">
+    <div id="clock" class="font-mono text-[11px] font-bold w-[65px] text-center" style="font-variant-numeric: tabular-nums; contain: layout paint;">00:00:00</div>
+  </div>
+  
+  <div id="be-menu-btn" class="w-[32px] h-[32px] bg-[#dcdcdc] border border-be-shadow flex items-center justify-center cursor-pointer shadow-[1px_1px_var(--be-black),inset_1px_1px_var(--be-white)] active:shadow-[inset_1px_1px_var(--be-black)] shrink-0 overflow-hidden" role="button" aria-label="Menu" tabindex="0">
+    <Image src="/img/32x32/Be-logo-icon.png" alt="BeOS" width={24} height={24} class="w-6 h-6" loading="eager" />
+  </div>
+</div>
+
+<div id="be-menu" class="fixed top-[45px] right-[10px] bg-be-grey border border-be-black shadow-[2px_2px_5px_rgba(0,0,0,0.5)] z-[2000] w-[140px] hidden select-none py-1">
+  <div class="be-menu-item px-[15px] py-[4px] cursor-pointer hover:bg-[#3366cc] hover:text-white" data-window="about">
+    <span>{t("nav.profile")}</span>
+  </div>
+  <div class="be-menu-item px-[15px] py-[4px] cursor-pointer hover:bg-[#3366cc] hover:text-white" data-window="socials">
+    <span>{t("nav.socials")}</span>
+  </div>
+  <div class="be-menu-item px-[15px] py-[4px] cursor-pointer hover:bg-[#3366cc] hover:text-white" data-window="music">
+    <span>{t("nav.music")}</span>
+  </div>
+  <div class="be-menu-item px-[15px] py-[4px] cursor-pointer hover:bg-[#3366cc] hover:text-white" data-window="guestbook">
+    <span>{t("nav.guestbook")}</span>
+  </div>
+  <div class="be-menu-item px-[15px] py-[4px] cursor-pointer hover:bg-[#3366cc] hover:text-white" data-window="stats">
+    <span>{t("nav.stats")}</span>
+  </div>
+  <div class="be-menu-item px-[15px] py-[4px] cursor-pointer hover:bg-[#3366cc] hover:text-white" data-window="xeyes">
+    <span>{t("nav.xeyes")}</span>
+  </div>
+  
+  <hr class="border-t border-be-shadow my-1 mx-0" />
+  
+  <div class="px-[10px] py-[2px] text-[8px] font-bold text-be-shadow uppercase">Language / Idioma</div>
+  {Object.entries(languages).map(([code, label]) => (
+    <a 
+      href={code === "pt-br" ? "/" : `/${code}/`} 
+      class={`block px-[15px] py-[4px] cursor-pointer hover:bg-[#3366cc] hover:text-white no-underline text-black ${lang === code ? "font-bold bg-be-shadow/10" : ""}`}
+      aria-label={`Switch language to ${label}`}
+    >
+      <span aria-hidden="true">{label}</span>
+    </a>
+  ))}
+
+  <hr class="border-t border-be-shadow my-1 mx-0" />
+  
+  <div class="be-menu-item px-[15px] py-[4px] cursor-pointer hover:bg-[#3366cc] hover:text-white" data-window="credits">
+    <span>{t("nav.credits")}</span>
+  </div>
+  <div class="be-menu-item px-[15px] py-[4px] cursor-pointer hover:bg-[#3366cc] hover:text-white" data-window="trash">
+    <span>{t("nav.trash")}</span>
+  </div>
+</div>
+
+<script>
+  import { startClock } from "../../scripts/clock";
+
+  function initDeskbar() {
+    const clockEl = document.getElementById("clock");
+    if (clockEl) {
+      startClock(clockEl);
+    }
+
+    const menuBtn = document.getElementById("be-menu-btn");
+    const menu = document.getElementById("be-menu");
+
+    menuBtn?.addEventListener("mousedown", (e) => {
+      e.stopPropagation();
+      menu?.classList.toggle("hidden");
+    });
+
+    document.addEventListener("mousedown", (e) => {
+      if (menu && !menu.contains(e.target as Node) && e.target !== menuBtn) {
+        menu.classList.add("hidden");
+      }
+    });
+
+    menu?.addEventListener("mousedown", (e) => {
+      const target = e.target as HTMLElement;
+      const item = target.closest(".be-menu-item");
+      if (item) {
+        setTimeout(() => menu?.classList.add("hidden"), 100);
+      }
+    });
+  }
+
+  initDeskbar();
+  document.addEventListener("astro:after-swap", initDeskbar);
+</script>
+
+<style>
+  .be-menu-item span {
+    font-size: 11px;
+    font-weight: 500;
+  }
+  
+  @media (max-width: 600px) {
+    #deskbar {
+      width: 100%;
+      height: 45px;
+      border-left: none;
+      padding: 0 10px;
+    }
+    #be-menu {
+      top: 46px;
+      right: 0;
+      width: 100%;
+    }
+  }
+</style>
