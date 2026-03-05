@@ -9,9 +9,9 @@ const t = useTranslations(lang);
   <div class="flex justify-between px-2 py-0.5 bg-be-shadow/10 mb-1 border-b border-be-shadow/20">
     <div class="flex items-center gap-1">
       <div class="w-1.5 h-1.5 bg-red-600 border border-black shadow-[0_0_2px_red]"></div>
-      <span class="text-[8px] font-bold uppercase tracking-widest text-be-shadow">Personal Audio BP-500</span>
+      <span class="text-[8px] font-bold uppercase tracking-widest text-be-shadow">{t('player.brand')}</span>
     </div>
-    <span class="text-[7px] font-mono text-be-shadow font-bold italic">anti-shock memory</span>
+    <span class="text-[7px] font-mono text-be-shadow font-bold italic">{t('player.antishock')}</span>
   </div>
 
   <div class="flex flex-col gap-2 p-1">
@@ -60,16 +60,16 @@ const t = useTranslations(lang);
     </div>
 
     <div class="flex gap-1 justify-center">
-      <button id="btn-prev" class="be-button !p-1 flex-1 flex items-center justify-center" title="Previous">
+      <button id="btn-prev" class="be-button !p-1 flex-1 flex items-center justify-center" title={t('player.prev')}>
         <Image src="/img/16x16/prev.png" alt="Prev" width={16} height={16} class="w-4 h-4" />
       </button>
 
-      <button id="btn-play-pause" class="be-button !p-1 flex-[2] flex items-center justify-center group" title="Play/Pause">
+      <button id="btn-play-pause" class="be-button !p-1 flex-[2] flex items-center justify-center group" title={t('player.play_pause')}>
         <Image id="img-play" src="/img/16x16/play.png" alt="Play" width={16} height={16} class="w-4 h-4" />
         <Image id="img-pause" src="/img/16x16/pause.png" alt="Pause" width={16} height={16} class="w-4 h-4 hidden" />
       </button>
 
-      <button id="btn-next" class="be-button !p-1 flex-1 flex items-center justify-center" title="Next">
+      <button id="btn-next" class="be-button !p-1 flex-1 flex items-center justify-center" title={t('player.next')}>
         <Image src="/img/16x16/next.png" alt="Next" width={16} height={16} class="w-4 h-4" />
       </button>
     </div>

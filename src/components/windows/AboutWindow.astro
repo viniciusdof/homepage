@@ -137,6 +137,10 @@ const t = useTranslations(lang);
 </BeWindow>
 
 <script>
+  import { ui } from "../../i18n/ui";
+  const lang = (document.documentElement.lang || "pt-br") as keyof typeof ui;
+  const t = (key: string) => (ui[lang] as any)[key] || (ui['pt-br'] as any)[key];
+
   function setAboutIsolatedText(el: HTMLElement, text: string) {
     if (!el.shadowRoot) {
       const shadow = el.attachShadow({ mode: 'open' });
@@ -161,41 +165,17 @@ const t = useTranslations(lang);
     }
 
     const lang = document.documentElement.lang || "pt-br";
-    const isEn = lang.startsWith("en");
-    const isEs = lang.startsWith("es");
-
-    const messages = isEn
-      ? [
-          "RETRIEVING SONIC VIBES...",
-          "INTERROGATING LAST.FM...",
-          "GAZING AT SHOES...",
-          "ADJUSTING INFINITE REVERB...",
-          "SEARCHING FOR THE PERFECT PEDAL...",
-          "CRANKING UP THE WALL OF SOUND...",
-          "SNIFFING AIRWAVES...",
-          "SCANNING DISC ROTATION...",
-        ]
-      : isEs
-        ? [
-            "RECUPERANDO VIBRACIONES...",
-            "MIRANDO LAS ZAPATILLAS...",
-            "AJUSTANDO EL REVERB INFINITO...",
-            "BUSCANDO EL PEDAL PERFECTO...",
-            "CARGANDO DATOS AUDITIVOS...",
-            "LLAMANDO MODEM BEOS...",
-            "ESCANEANDO DISCO...",
-          ]
-        : [
-            "SCROBBLANDO ATÉ O TALO...",
-            "OLHANDO PARA O TÊNIS...",
-            "AJUSTANDO O REVERB INFINITO...",
-            "PROCURANDO O PEDAL PERDIDO...",
-            "AUMENTANDO O WALL OF SOUND...",
-            "SINCROBBLANDO OS DADOS...",
-            "VERIFICANDO SE É POSER...",
-            "CARREGANDO A SOFRÊNCIA...",
-            "DISCANDO PARA O MODEM...",
-          ];
+    
+    const messages = [
+      t('profile.loading_1'),
+      t('profile.loading_2'),
+      t('profile.loading_3'),
+      t('profile.loading_4'),
+      t('profile.loading_5'),
+      t('profile.loading_6'),
+      t('profile.loading_7'),
+      t('profile.loading_8'),
+    ].filter(Boolean);
 
     if (npLoadingMsg) {
       setAboutIsolatedText(npLoadingMsg, messages[Math.floor(Math.random() * messages.length)]);
@@ -232,18 +212,10 @@ const t = useTranslations(lang);
       if (status) {
         let statusText = "";
         if (data.nowPlaying) {
-          statusText = isEn
-            ? "Now Playing"
-            : isEs
-              ? "Escuchando ahora"
-              : "Ouvindo agora";
+          statusText = t('profile.now_playing');
           indicator?.classList.remove("hidden");
         } else {
-          statusText = isEn
-            ? "Last Scrobble"
-            : isEs
-              ? "Última escuchada"
-              : "Última ouvida";
+          statusText = t('profile.last_scrobble');
           indicator?.classList.add("hidden");
         }
         setAboutIsolatedText(status, statusText);
