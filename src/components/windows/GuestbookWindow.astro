@@ -1,7 +1,7 @@
 ---
-import BeWindow from "../core/BeWindow.astro";
-import Guestbook from "../apps/Guestbook.astro";
 import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+import Guestbook from "../apps/Guestbook.astro";
+import BeWindow from "../core/BeWindow.astro";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);

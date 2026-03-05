@@ -1,5 +1,7 @@
 export function startClock(el: HTMLElement) {
-  if (el.dataset.clockActive === "true") return;
+  if (el.dataset.clockActive === "true") {
+    return;
+  }
   el.dataset.clockActive = "true";
 
   let shadow = el.shadowRoot;
@@ -16,7 +18,9 @@ export function startClock(el: HTMLElement) {
   }
 
   const clockInner = shadow.getElementById("clock-inner");
-  if (!clockInner) return;
+  if (!clockInner) {
+    return;
+  }
 
   const update = () => {
     if (!el.isConnected) {
@@ -33,7 +37,7 @@ export function startClock(el: HTMLElement) {
     if (clockInner.textContent !== timeStr) {
       clockInner.textContent = timeStr;
     }
-    
+
     if (el.dataset.clockActive === "true") {
       setTimeout(update, 1000);
     }

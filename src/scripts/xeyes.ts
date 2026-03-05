@@ -19,31 +19,51 @@ export function initXEyes(container: HTMLElement) {
 
     const isDragging = windowEl?.classList.contains("dragging");
     if (isDragging) {
-      if (!container.classList.contains("tearing")) container.classList.add("tearing");
+      if (!container.classList.contains("tearing")) {
+        container.classList.add("tearing");
+      }
       eyes.forEach((eye) => {
-        if (!eye.classList.contains("eye-shaking")) eye.classList.add("eye-shaking");
+        if (!eye.classList.contains("eye-shaking")) {
+          eye.classList.add("eye-shaking");
+        }
       });
-      if (container.classList.contains("dizzy")) container.classList.remove("dizzy");
+      if (container.classList.contains("dizzy")) {
+        container.classList.remove("dizzy");
+      }
       eyes.forEach((eye) => {
-        if (eye.style.backgroundColor !== "white") eye.style.backgroundColor = "white";
+        if (eye.style.backgroundColor !== "white") {
+          eye.style.backgroundColor = "white";
+        }
       });
     } else {
-      if (container.classList.contains("tearing")) container.classList.remove("tearing");
+      if (container.classList.contains("tearing")) {
+        container.classList.remove("tearing");
+      }
       eyes.forEach((eye) => {
-        if (eye.classList.contains("eye-shaking")) eye.classList.remove("eye-shaking");
+        if (eye.classList.contains("eye-shaking")) {
+          eye.classList.remove("eye-shaking");
+        }
       });
 
       const isMobile = window.innerWidth <= 640;
 
       if (velocity > 50 && !isMobile) {
-        if (!container.classList.contains("dizzy")) container.classList.add("dizzy");
+        if (!container.classList.contains("dizzy")) {
+          container.classList.add("dizzy");
+        }
         eyes.forEach((eye) => {
-          if (eye.style.backgroundColor !== "") eye.style.backgroundColor = "";
+          if (eye.style.backgroundColor !== "") {
+            eye.style.backgroundColor = "";
+          }
         });
       } else {
-        if (container.classList.contains("dizzy")) container.classList.remove("dizzy");
+        if (container.classList.contains("dizzy")) {
+          container.classList.remove("dizzy");
+        }
         eyes.forEach((eye) => {
-          if (eye.style.backgroundColor !== "white") eye.style.backgroundColor = "white";
+          if (eye.style.backgroundColor !== "white") {
+            eye.style.backgroundColor = "white";
+          }
         });
       }
     }
@@ -76,7 +96,7 @@ export function initXEyes(container: HTMLElement) {
       const moveX = Math.cos(angle) * Math.min(distance, limit);
       const moveY = Math.sin(angle) * Math.min(distance, limit);
 
-      const transform = isDragging 
+      const transform = isDragging
         ? `translate(${moveX + (Math.random() - 0.5) * 5}px, ${moveY + (Math.random() - 0.5) * 5}px)`
         : `translate(${moveX}px, ${moveY}px)`;
 
@@ -85,26 +105,36 @@ export function initXEyes(container: HTMLElement) {
       }
 
       if (velocity > 50 && !isDragging) {
-        if (!pupil.classList.contains("animate-spin")) pupil.classList.add("animate-spin");
+        if (!pupil.classList.contains("animate-spin")) {
+          pupil.classList.add("animate-spin");
+        }
       } else {
-        if (pupil.classList.contains("animate-spin")) pupil.classList.remove("animate-spin");
+        if (pupil.classList.contains("animate-spin")) {
+          pupil.classList.remove("animate-spin");
+        }
       }
-      
+
       if (pupil.style.backgroundColor !== "black") {
         pupil.style.backgroundColor = "black";
       }
-      
-      if (pupil.style.boxShadow !== "none") pupil.style.boxShadow = "none";
+
+      if (pupil.style.boxShadow !== "none") {
+        pupil.style.boxShadow = "none";
+      }
     });
   };
 
   const onMouseMove = (e: MouseEvent) => {
-    if (rafId) cancelAnimationFrame(rafId);
+    if (rafId) {
+      cancelAnimationFrame(rafId);
+    }
     rafId = requestAnimationFrame(() => updateEyes(e.clientX, e.clientY));
   };
 
   const setEvilMode = () => {
-    if (rafId) cancelAnimationFrame(rafId);
+    if (rafId) {
+      cancelAnimationFrame(rafId);
+    }
     container.classList.add("evil");
     container.classList.remove("tearing");
     container.classList.remove("dizzy");
@@ -129,7 +159,9 @@ export function initXEyes(container: HTMLElement) {
     (e) => {
       if (e.touches.length > 0) {
         const t = e.touches[0];
-        if (rafId) cancelAnimationFrame(rafId);
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+        }
         rafId = requestAnimationFrame(() => updateEyes(t.clientX, t.clientY));
       }
     },
@@ -142,7 +174,9 @@ export function initXEyes(container: HTMLElement) {
 
   document.addEventListener("mouseenter", () => {
     eyes.forEach((eye) => {
-      if (eye.style.backgroundColor !== "white") eye.style.backgroundColor = "white";
+      if (eye.style.backgroundColor !== "white") {
+        eye.style.backgroundColor = "white";
+      }
     });
   });
 }

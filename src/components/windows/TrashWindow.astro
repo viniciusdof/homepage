@@ -1,8 +1,8 @@
 ---
 import { Image } from "astro:assets";
-import BeWindow from "../core/BeWindow.astro";
-import BeButton from "../core/BeButton.astro";
 import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+import BeButton from "../core/BeButton.astro";
+import BeWindow from "../core/BeWindow.astro";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);

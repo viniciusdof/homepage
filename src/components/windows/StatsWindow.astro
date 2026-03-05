@@ -1,6 +1,6 @@
 ---
-import BeWindow from "../core/BeWindow.astro";
 import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+import BeWindow from "../core/BeWindow.astro";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);

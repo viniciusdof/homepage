@@ -1,17 +1,15 @@
 ---
-import DesktopLayout from "../../layouts/DesktopLayout.astro";
 import DesktopIcon from "../../components/desktop/DesktopIcon.astro";
-
 import AboutWindow from "../../components/windows/AboutWindow.astro";
-import SocialsWindow from "../../components/windows/SocialsWindow.astro";
-import MusicWindow from "../../components/windows/MusicWindow.astro";
-import XEyesWindow from "../../components/windows/XEyesWindow.astro";
-import GuestbookWindow from "../../components/windows/GuestbookWindow.astro";
-import StatsWindow from "../../components/windows/StatsWindow.astro";
 import CreditsWindow from "../../components/windows/CreditsWindow.astro";
+import GuestbookWindow from "../../components/windows/GuestbookWindow.astro";
+import MusicWindow from "../../components/windows/MusicWindow.astro";
+import SocialsWindow from "../../components/windows/SocialsWindow.astro";
+import StatsWindow from "../../components/windows/StatsWindow.astro";
 import TrashWindow from "../../components/windows/TrashWindow.astro";
-
+import XEyesWindow from "../../components/windows/XEyesWindow.astro";
 import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+import DesktopLayout from "../../layouts/DesktopLayout.astro";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);

@@ -1,5 +1,7 @@
 export function enableDrag(el: HTMLElement, handle: HTMLElement) {
-  if (handle.dataset.dragEnabled === "true") return;
+  if (handle.dataset.dragEnabled === "true") {
+    return;
+  }
   handle.dataset.dragEnabled = "true";
 
   let offsetX = 0;
