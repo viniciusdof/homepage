@@ -6,7 +6,7 @@ A year 2000 OS simulated in your modern browser just to show a few links. Progre
 
 ## Features (or bugs, who knows)
 
-- **Pseudo-BeOS Interface**: A desktop experience that peaked in 1998, because modern UX is a nightmare, i was born in 1999 btw.
+- **Pseudo-BeOS Interface**: A desktop experience that peaked in 1998. Modern UX is a nightmare. btw i was born in 1999.
 - **System Monitor**: A high-tech LCD widget to track the "Online" users (actually is visitors count, but i like the word "Online").
 - **Interactive Time-Wasters**:
   - **Bandcamp Player**: Streams my personal collection because I'm too cool for Spotify.
