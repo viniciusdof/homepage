@@ -17,12 +17,12 @@
     "@fontsource/arimo": "^5.2.8",
     "@fontsource/courier-prime": "^5.2.8",
     "@tailwindcss/vite": "^4.2.1",
-    "astro": "^5.17.1",
+    "astro": "^5.18.0",
     "tailwindcss": "^4.2.1",
     "typescript": "^5.9.3"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.6",
-    "wrangler": "^4.69.0"
+    "wrangler": "^4.71.0"
   }
 }
