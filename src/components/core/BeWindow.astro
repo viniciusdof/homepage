@@ -46,19 +46,7 @@ const {
 </div>
 
 <script>
-  import { enableDrag } from "../../scripts/drag";
-
-  function initWindows() {
-    for (const win of document.querySelectorAll<HTMLElement>(".be-window")) {
-      const handle = win.querySelector<HTMLElement>(".window-tab");
-      if (handle) {
-        enableDrag(win, handle);
-      }
-    }
-  }
-
-  initWindows();
-  document.addEventListener("astro:after-swap", initWindows);
+  import "../../scripts/windowManager";
 </script>
 
 <style>

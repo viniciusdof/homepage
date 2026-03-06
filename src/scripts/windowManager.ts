@@ -1,3 +1,5 @@
+import { initGlobalDrag } from "./drag";
+
 let zCounter = 100;
 
 export function focusWindow(el: HTMLElement) {
@@ -33,6 +35,7 @@ export function closeWindow(id: string) {
 
 if (!(window as any).__windowManagerInitialized) {
   (window as any).__windowManagerInitialized = true;
+  initGlobalDrag();
 
   const handleInteraction = (target: HTMLElement) => {
     const win = target.closest(".be-window, .desktop-icon") as HTMLElement;
@@ -73,7 +76,9 @@ if (!(window as any).__windowManagerInitialized) {
         target.hasAttribute("data-close") ||
         target.classList.contains("be-menu-item")
       ) {
-        if (e.key === " ") e.preventDefault();
+        if (e.key === " ") {
+          e.preventDefault();
+        }
         handleInteraction(target);
       }
     }
