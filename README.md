@@ -1,6 +1,18 @@
-# homepage
+# VDoF OS (Homepage)
 
 A year 2000 OS simulated in your modern browser just to show a few links. Progress is an illusion.
+
+![VDoF OS Preview](./assets/homepage.png)
+
+## Features (or bugs, who knows)
+
+- **Pseudo-BeOS Interface**: A desktop experience that peaked in 1998, because modern UX is a nightmare.
+- **System Monitor**: A high-tech LCD widget to track the "Online" users (actually is visitors count, but i like the word "Online").
+- **Interactive Time-Wasters**:
+  - **Bandcamp Player**: Streams my personal collection because I'm too cool for Spotify.
+  - **Digital Guestbook**: A place to scream into the void.
+  - **The Eyes**: They follow you. They know what you did. Don't make them cry.
+- **Localized Misery**: Now available in English, Portuguese, and Spanish.
 
 ## Commands
 
