@@ -9,30 +9,92 @@ const t = useTranslations(lang);
 <BeWindow
   id="stats"
   title={t("nav.stats")}
-  width="200px"
-  height="120px"
-  top="50px"
-  left="800px"
+  width="240px"
+  height="150px"
+  top="60px"
+  right="120px"
 >
-  <div class="bg-white be-well p-3 text-center font-mono" id="stats-container">
-    <p class="text-sm">
-      {t("stats.visitors")}: <span id="visitor-count" class="font-bold" style="contain: layout paint; display: inline-block; min-width: 20px;">...</span>
-    </p>
-    <p class="text-[10px] text-be-shadow mt-2">
-      {t("stats.load")}: <span id="load-pct" style="contain: layout paint; display: inline-block; min-width: 15px;">2</span>%
-    </p>
+  <div
+    class="h-full flex flex-col bg-be-grey font-mono overflow-hidden"
+    id="stats-container"
+  >
+    <div
+      class="bg-black p-3 flex-1 border border-black shadow-[inset_2px_2px_5px_black,1px_1px_white] relative overflow-hidden group flex flex-col justify-between"
+    >
+      <div class="z-10">
+        <div class="flex flex-col mb-4">
+          <span
+            class="text-[8px] text-be-yellow/70 uppercase tracking-widest leading-tight"
+            >{t("stats.visitors")}</span
+          >
+          <div class="flex items-baseline gap-2">
+            <span
+              id="visitor-count"
+              class="text-2xl font-bold text-be-yellow drop-shadow-[0_0_4px_rgba(254,211,0,0.6)]"
+              style="contain: layout paint; display: inline-block; min-width: 40px;"
+              >...</span
+            >
+            <span
+              class="text-[9px] text-be-yellow/40 uppercase font-bold italic"
+              >Online</span
+            >
+          </div>
+        </div>
+
+        <div class="flex flex-col">
+          <div class="flex justify-between items-end mb-1">
+            <span
+              class="text-[8px] text-be-yellow/70 uppercase tracking-widest leading-tight"
+              >{t("stats.load")}</span
+            >
+            <span
+              id="load-pct-text"
+              class="text-[10px] text-be-yellow font-bold tabular-nums"
+              style="contain: layout paint; display: inline-block; min-width: 25px;"
+              >2%</span
+            >
+          </div>
+          <div class="flex gap-[2px] h-4 items-end" id="load-bars">
+            {
+              Array.from({ length: 24 }).map((_, _i) => (
+                <div class="flex-1 h-full bg-be-yellow/5 border-[0.5px] border-black transition-colors duration-300 indicator-bar" />
+              ))
+            }
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="z-10 flex justify-between items-center mt-2 border-t border-be-yellow/10 pt-2"
+      >
+        <span class="text-[7px] text-be-yellow/30 uppercase"
+          >System Monitor v2.1</span
+        >
+        <div class="flex gap-1">
+          <div class="w-1.5 h-1.5 rounded-full bg-be-yellow/20 animate-pulse">
+          </div>
+          <div class="w-1.5 h-1.5 rounded-full bg-be-yellow/10"></div>
+        </div>
+      </div>
+
+      <div
+        class="absolute inset-0 bg-[linear-gradient(rgba(254,211,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(254,211,0,0.02)_1px,transparent_1px)] bg-[size:4px_4px] pointer-events-none"
+      >
+      </div>
+    </div>
   </div>
 </BeWindow>
 
 <script>
   function setIsolatedText(el: HTMLElement, text: string) {
     if (!el.shadowRoot) {
-      const shadow = el.attachShadow({ mode: 'open' });
-      const span = document.createElement('span');
-      span.id = 'inner';
+      const shadow = el.attachShadow({ mode: "open" });
+      const span = document.createElement("span");
+      span.id = "inner";
+      span.style.fontFamily = "inherit";
       shadow.appendChild(span);
     }
-    const inner = el.shadowRoot!.getElementById('inner')!;
+    const inner = el.shadowRoot!.getElementById("inner")!;
     if (inner.textContent !== text) {
       inner.textContent = text;
     }
@@ -47,7 +109,7 @@ const t = useTranslations(lang);
       const data = await res.json();
       const countEl = document.getElementById("visitor-count");
       if (countEl && data.visitors) {
-        setIsolatedText(countEl, String(data.visitors));
+        setIsolatedText(countEl, String(data.visitors).padStart(6, "0"));
         sessionStorage.setItem("counted_visit", "true");
       }
     } catch (e) {
@@ -56,17 +118,34 @@ const t = useTranslations(lang);
   }
 
   function updateLoad() {
-    const loadEl = document.getElementById("load-pct");
-    if (loadEl) {
-      const newLoad = String(Math.floor(Math.random() * 5) + 1);
-      setIsolatedText(loadEl, newLoad);
+    const loadTextEl = document.getElementById("load-pct-text");
+    const container = document.getElementById("load-bars");
+
+    if (loadTextEl && container) {
+      const load = Math.floor(Math.random() * 8) + 1;
+      setIsolatedText(loadTextEl, `${load}%`);
+
+      const bars = container.querySelectorAll(".indicator-bar");
+      const activeCount = Math.ceil((load / 100) * bars.length) + 1;
+
+      bars.forEach((bar, i) => {
+        const barEl = bar as HTMLElement;
+        if (i < activeCount) {
+          barEl.style.backgroundColor = "#fed300";
+          barEl.style.boxShadow = "0 0 4px rgba(254,211,0,0.4)";
+        } else {
+          barEl.style.backgroundColor = "rgba(254,211,0,0.05)";
+          barEl.style.boxShadow = "none";
+        }
+      });
     }
   }
 
-  const container = document.getElementById('stats-container');
+  const container = document.getElementById("stats-container");
   if (container && !container.dataset.initialized) {
-    container.dataset.initialized = 'true';
+    container.dataset.initialized = "true";
     updateStats();
+    updateLoad();
     setInterval(updateLoad, 3000);
   }
 </script>

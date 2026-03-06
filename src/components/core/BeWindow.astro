@@ -6,6 +6,7 @@ interface Props {
   height?: string;
   top?: string;
   left?: string;
+  right?: string;
   initialVisible?: boolean;
 }
 
@@ -15,15 +16,18 @@ const {
   width = "300px",
   height = "200px",
   top = "100px",
-  left = "100px",
+  left,
+  right,
   initialVisible = false,
 } = Astro.props;
+
+const positionStyle = left ? `left: ${left};` : right ? `right: ${right};` : "left: 100px;";
 ---
 
 <div
   id={`window-${id}`}
   class="be-window absolute bg-be-grey border border-be-black flex-col pointer-events-auto"
-  style={`width: ${width}; height: ${height}; top: ${top}; left: ${left}; display: ${initialVisible ? "flex" : "none"}; z-index: 100; box-shadow: 1px 1px var(--be-white), -1px -1px var(--be-shadow);`}
+  style={`width: ${width}; height: ${height}; top: ${top}; ${positionStyle} display: ${initialVisible ? "flex" : "none"}; z-index: 100; box-shadow: 1px 1px var(--be-white), -1px -1px var(--be-shadow);`}
   role="dialog"
   aria-labelledby={`window-title-${id}`}
 >
