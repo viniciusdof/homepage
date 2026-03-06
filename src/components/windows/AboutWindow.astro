@@ -155,7 +155,19 @@ const t = useTranslations(lang);
     }
   }
 
+  let lastFetchTime = 0;
+
   async function updateLastFM() {
+    const winEl = document.getElementById("window-about");
+    if (winEl && window.getComputedStyle(winEl).display === "none") {
+      return;
+    }
+
+    const now = Date.now();
+    if (now - lastFetchTime < 10000) {
+      return;
+    }
+
     const npWidget = document.getElementById("now-playing");
     const npContent = document.getElementById("np-content");
     const npLoading = document.getElementById("np-loading");
@@ -184,6 +196,7 @@ const t = useTranslations(lang);
     }
 
     try {
+      lastFetchTime = Date.now();
       const response = await fetch("/api/lastfm");
       const data = await response.json();
 
@@ -234,7 +247,18 @@ const t = useTranslations(lang);
   const npWidget = document.getElementById("now-playing");
   if (npWidget && !npWidget.dataset.initialized) {
     npWidget.dataset.initialized = "true";
+
+    const winEl = document.getElementById("window-about");
+    if (winEl) {
+      const observer = new MutationObserver(() => {
+        if (window.getComputedStyle(winEl).display !== "none") {
+          updateLastFM();
+        }
+      });
+      observer.observe(winEl, { attributes: true, attributeFilter: ["style"] });
+    }
+
     updateLastFM();
-    setInterval(updateLastFM, 60000);
+    setInterval(updateLastFM, 120000);
   }
 </script>
