@@ -12,7 +12,6 @@ A year 2000 OS simulated in your modern browser just to show a few links. Progre
   - **Bandcamp Player**: Streams my personal collection because I'm too cool for Spotify.
   - **Digital Guestbook**: A place to scream into the void.
   - **The Eyes**: They follow you. They know what you did. Don't make them cry.
-- **Localized Misery**: Now available in English, Portuguese, and Spanish.
 
 ## Commands
 
