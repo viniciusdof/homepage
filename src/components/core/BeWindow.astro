@@ -8,6 +8,7 @@ interface Props {
   left?: string;
   right?: string;
   initialVisible?: boolean;
+  overflowHidden?: boolean;
 }
 
 const {
@@ -19,6 +20,7 @@ const {
   left,
   right,
   initialVisible = false,
+  overflowHidden = false,
 } = Astro.props;
 
 const positionStyle = left ? `left: ${left};` : right ? `right: ${right};` : "left: 100px;";
@@ -43,7 +45,7 @@ const positionStyle = left ? `left: ${left};` : right ? `right: ${right};` : "le
   </div>
 
   <div class="be-window-content-wrapper p-1 flex-1 flex flex-col min-h-0">
-    <div class="be-window-content bg-be-grey border-2 border-be-shadow shadow-[1px_1px_var(--be-white),-1px_-1px_var(--be-shadow)] p-[10px] h-full overflow-auto">
+    <div class={`be-window-content bg-be-grey border-2 border-be-shadow shadow-[1px_1px_var(--be-white),-1px_-1px_var(--be-shadow)] p-[10px] h-full ${overflowHidden ? 'overflow-hidden' : 'overflow-auto'}`}>
       <slot />
     </div>
   </div>
