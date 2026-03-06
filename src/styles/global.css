@@ -95,6 +95,12 @@
     font-weight: bold;
     user-select: none;
     cursor: pointer;
+    outline: none;
+  }
+
+  .be-button:focus-visible {
+    outline: 2px solid var(--be-yellow);
+    outline-offset: 1px;
   }
 
   .be-button:hover {

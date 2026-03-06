@@ -34,9 +34,7 @@ export function closeWindow(id: string) {
 if (!(window as any).__windowManagerInitialized) {
   (window as any).__windowManagerInitialized = true;
 
-  document.addEventListener("mousedown", (e) => {
-    const target = e.target as HTMLElement;
-
+  const handleInteraction = (target: HTMLElement) => {
     const win = target.closest(".be-window, .desktop-icon") as HTMLElement;
     if (win) {
       focusWindow(win);
@@ -56,6 +54,34 @@ if (!(window as any).__windowManagerInitialized) {
     if (closeBtn) {
       const id = closeBtn.getAttribute("data-close");
       if (id) {
+        closeWindow(id);
+      }
+    }
+  };
+
+  document.addEventListener("mousedown", (e) => {
+    handleInteraction(e.target as HTMLElement);
+  });
+
+  document.addEventListener("keydown", (e) => {
+    const target = e.target as HTMLElement;
+
+    if (e.key === "Enter" || e.key === " ") {
+      if (
+        target.classList.contains("desktop-icon") ||
+        target.hasAttribute("data-window") ||
+        target.hasAttribute("data-close") ||
+        target.classList.contains("be-menu-item")
+      ) {
+        if (e.key === " ") e.preventDefault();
+        handleInteraction(target);
+      }
+    }
+
+    if (e.key === "Escape") {
+      const focusedWin = document.querySelector(".be-window.focused") as HTMLElement;
+      if (focusedWin) {
+        const id = focusedWin.id.replace("window-", "");
         closeWindow(id);
       }
     }
