@@ -1,8 +1,9 @@
 import type { APIRoute } from "astro";
+import { env } from "cloudflare:workers";
 
-export const GET: APIRoute = async ({ locals, url }) => {
+export const GET: APIRoute = async ({ url }) => {
   try {
-    const db = (locals as any).runtime?.env?.guestbook_db;
+    const db = (env as any).guestbook_db;
     const shouldIncrement = url.searchParams.get("inc") === "true";
 
     if (db) {

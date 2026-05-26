@@ -215,6 +215,7 @@ const t = useTranslations(lang);
       }
     } catch (e) {
       console.error("Failed to load album", e);
+      setLcdText(lcdTitle, t('player.error'));
     }
   }
 

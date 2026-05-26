@@ -7,7 +7,7 @@ export function focusWindow(el: HTMLElement) {
     return;
   }
 
-  zCounter++;
+  zCounter = Math.min(zCounter + 1, 9999);
   el.style.zIndex = String(zCounter);
 
   for (const w of document.querySelectorAll(".be-window")) {

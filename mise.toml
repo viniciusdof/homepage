@@ -1,5 +1,5 @@
 [tools]
-"github:terror/just-lsp" = "latest"
-just = "1.46.0"
-node = "25.8.0"
-pnpm = "10.30.3"
+"github:terror/just-lsp" = "0.4.5"
+just = "1.51.0"
+node = "26.2.0"
+pnpm = "11.3.0"

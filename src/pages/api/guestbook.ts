@@ -1,8 +1,9 @@
 import type { APIRoute } from "astro";
+import { env } from "cloudflare:workers";
 
-export const GET: APIRoute = async ({ locals }) => {
+export const GET: APIRoute = async () => {
   try {
-    const db = (locals as any).runtime?.env?.guestbook_db;
+    const db = (env as any).guestbook_db;
 
     if (db) {
       const { results } = await db.prepare("SELECT * FROM entries ORDER BY id DESC LIMIT 50").all();
@@ -27,12 +28,12 @@ export const GET: APIRoute = async ({ locals }) => {
   }
 };
 
-export const POST: APIRoute = async ({ request, locals }) => {
+export const POST: APIRoute = async ({ request }) => {
   try {
     const body = await request.json();
     const { name, msg, color } = body;
 
-    const db = (locals as any).runtime?.env?.guestbook_db;
+    const db = (env as any).guestbook_db;
     const date = new Date().toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
 
     if (db) {

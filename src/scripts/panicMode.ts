@@ -15,13 +15,14 @@ export function triggerPanic() {
   }
 
   const panicWindows: HTMLElement[] = [];
+  const isMobile = window.innerWidth <= 640;
+  const fragment = document.createDocumentFragment();
 
-  const createError = () => {
+  for (let i = 0; i < 20; i++) {
     const error = document.createElement("div");
     error.className =
       "be-window panic-window absolute bg-be-grey border border-be-black z-[9999] p-1 flex flex-col shadow-2xl focused animate-bob";
 
-    const isMobile = window.innerWidth <= 640;
     const width = isMobile ? 120 + Math.random() * 60 : 200;
     const height = isMobile ? 80 + Math.random() * 40 : 120;
 
@@ -29,7 +30,6 @@ export function triggerPanic() {
     error.style.top = `${Math.random() * (window.innerHeight - height)}px`;
     error.style.width = `${width}px`;
     error.style.height = `${height}px`;
-
     error.style.transform = `rotate(${(Math.random() - 0.5) * 20}deg)`;
     error.style.animationDelay = `${Math.random() * 0.5}s`;
     error.style.animationDuration = `${0.4 + Math.random() * 0.2}s`;
@@ -49,34 +49,27 @@ export function triggerPanic() {
       </div>
     `;
 
-    document.body.appendChild(error);
-    panicWindows.push(error);
-
     error.querySelector(".reboot-btn")?.addEventListener("click", () => {
       error.remove();
     });
-  };
 
-  let count = 0;
-  const interval = setInterval(() => {
-    createError();
-    count++;
-    if (count >= 20) {
-      clearInterval(interval);
+    fragment.appendChild(error);
+    panicWindows.push(error);
+  }
 
-      setTimeout(() => {
-        for (const win of panicWindows) {
-          win.remove();
-        }
-        desktop.classList.remove("panic-shake");
+  document.body.appendChild(fragment);
 
-        if (xeyesApp) {
-          xeyesApp.classList.remove("tearing");
-          for (const eye of xeyesApp.querySelectorAll(".eye")) {
-            eye.classList.remove("eye-shaking");
-          }
-        }
-      }, 5000);
+  setTimeout(() => {
+    for (const win of panicWindows) {
+      win.remove();
     }
-  }, 100);
+    desktop.classList.remove("panic-shake");
+
+    if (xeyesApp) {
+      xeyesApp.classList.remove("tearing");
+      for (const eye of xeyesApp.querySelectorAll(".eye")) {
+        eye.classList.remove("eye-shaking");
+      }
+    }
+  }, 5000);
 }

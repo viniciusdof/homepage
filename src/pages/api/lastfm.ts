@@ -1,8 +1,8 @@
 import type { APIRoute } from "astro";
+import { env } from "cloudflare:workers";
 
-export const GET: APIRoute = async ({ locals }) => {
-  const env = (locals as any).runtime?.env;
-  const LASTFM_API_KEY = env?.LASTFM_API_KEY || import.meta.env.LASTFM_API_KEY;
+export const GET: APIRoute = async () => {
+  const LASTFM_API_KEY = (env as any).LASTFM_API_KEY || import.meta.env.LASTFM_API_KEY;
   const LASTFM_USER = "viniciusdof";
 
   if (!LASTFM_API_KEY) {

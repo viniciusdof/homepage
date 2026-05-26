@@ -152,31 +152,41 @@ export function initXEyes(container: HTMLElement) {
     });
   };
 
-  document.addEventListener("mousemove", onMouseMove);
-
-  document.addEventListener(
-    "touchmove",
-    (e) => {
-      if (e.touches.length > 0) {
-        const t = e.touches[0];
-        if (rafId) {
-          cancelAnimationFrame(rafId);
-        }
-        rafId = requestAnimationFrame(() => updateEyes(t.clientX, t.clientY));
+  const onTouchMove = (e: TouchEvent) => {
+    if (e.touches.length > 0) {
+      const t = e.touches[0];
+      if (rafId) {
+        cancelAnimationFrame(rafId);
       }
-    },
-    { passive: false },
-  );
+      rafId = requestAnimationFrame(() => updateEyes(t.clientX, t.clientY));
+    }
+  };
 
-  document.documentElement.addEventListener("mouseleave", setEvilMode);
-
-  window.addEventListener("blur", setEvilMode);
-
-  document.addEventListener("mouseenter", () => {
+  const onMouseEnter = () => {
     eyes.forEach((eye) => {
       if (eye.style.backgroundColor !== "white") {
         eye.style.backgroundColor = "white";
       }
     });
-  });
+  };
+
+  document.addEventListener("mousemove", onMouseMove);
+  document.addEventListener("touchmove", onTouchMove, { passive: false });
+  document.documentElement.addEventListener("mouseleave", setEvilMode);
+  window.addEventListener("blur", setEvilMode);
+  document.addEventListener("mouseenter", onMouseEnter);
+
+  if (windowEl) {
+    windowEl.addEventListener("window-closed", () => {
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("touchmove", onTouchMove);
+      document.documentElement.removeEventListener("mouseleave", setEvilMode);
+      window.removeEventListener("blur", setEvilMode);
+      document.removeEventListener("mouseenter", onMouseEnter);
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
+    }, { once: true });
+  }
 }
