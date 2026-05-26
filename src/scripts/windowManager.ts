@@ -98,4 +98,23 @@ if (!(window as any).__windowManagerInitialized) {
       focusWindow(win);
     }
   });
+
+  const KONAMI = [
+    "ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown",
+    "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight",
+    "b", "a",
+  ];
+  let konamiIdx = 0;
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === KONAMI[konamiIdx]) {
+      konamiIdx++;
+      if (konamiIdx === KONAMI.length) {
+        konamiIdx = 0;
+        import("./panicMode").then((m) => m.triggerPanic());
+      }
+    } else {
+      konamiIdx = e.key === KONAMI[0] ? 1 : 0;
+    }
+  });
 }

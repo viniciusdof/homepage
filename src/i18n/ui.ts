@@ -16,6 +16,7 @@ export const ui = {
     "nav.xeyes": "XEyes",
     "nav.credits": "Credits",
     "nav.trash": "Trash",
+    "nav.new_note": "New Sticky Note",
 
     "player.ready": "READY TO PLAY",
     "player.ejected": "DISK EJECTED",
@@ -87,6 +88,7 @@ export const ui = {
     "nav.xeyes": "XEyes",
     "nav.credits": "Créditos",
     "nav.trash": "Lixeira",
+    "nav.new_note": "Novo Post-it",
 
     "player.ready": "PRONTO PARA TOCAR",
     "player.ejected": "DISCO INJETADO",
@@ -158,6 +160,7 @@ export const ui = {
     "nav.xeyes": "XEyes",
     "nav.credits": "Créditos",
     "nav.trash": "Papelera",
+    "nav.new_note": "Nueva Nota",
 
     "player.ready": "LISTO PARA REPRODUCIR",
     "player.ejected": "DISCO EXPULSADO",

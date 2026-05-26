@@ -288,8 +288,14 @@ const t = useTranslations(lang);
     }
   });
 
-  audio.addEventListener('play', updateTransportUI);
-  audio.addEventListener('pause', updateTransportUI);
+  audio.addEventListener('play', () => {
+    updateTransportUI();
+    document.dispatchEvent(new CustomEvent("music-state", { detail: { playing: true } }));
+  });
+  audio.addEventListener('pause', () => {
+    updateTransportUI();
+    document.dispatchEvent(new CustomEvent("music-state", { detail: { playing: false } }));
+  });
 
   root.querySelector('#btn-next')!.addEventListener('click', () => {
     if (currentTrackIdx < currentTracks.length - 1) {

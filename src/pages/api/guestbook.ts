@@ -6,7 +6,10 @@ export const GET: APIRoute = async () => {
     const db = (env as any).guestbook_db;
 
     if (db) {
-      const { results } = await db.prepare("SELECT * FROM entries ORDER BY id DESC LIMIT 50").all();
+      const { results } = await db
+        .prepare("SELECT * FROM entries ORDER BY id DESC LIMIT 50")
+        .all();
+
       return new Response(JSON.stringify(results), { status: 200 });
     }
 

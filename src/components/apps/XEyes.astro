@@ -85,6 +85,16 @@
   .ease-back {
     transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
   }
+
+  .xeyes-container.dancing {
+    animation: xeyes-bob 0.45s ease-in-out infinite;
+  }
+
+  @keyframes xeyes-bob {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-6px) rotate(-3deg); }
+    75% { transform: translateY(-6px) rotate(3deg); }
+  }
 </style>
 
 <script>
@@ -110,8 +120,15 @@
         eyelids.forEach(el => el.classList.add('eyelid-blink'));
         setTimeout(() => {
           eyelids.forEach(el => el.classList.remove('eyelid-blink'));
-        }, 500); 
+        }, 500);
       });
+    });
+
+    app.addEventListener('xeyes-blink', () => {
+      eyelids.forEach(el => el.classList.add('eyelid-blink'));
+      setTimeout(() => {
+        eyelids.forEach(el => el.classList.remove('eyelid-blink'));
+      }, 200);
     });
   }
 </script>

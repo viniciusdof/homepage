@@ -7,8 +7,13 @@ export function initXEyes(container: HTMLElement) {
   let lastY = 0;
   let velocity = 0;
   let rafId: number | null = null;
+  let dancing = false;
+  let dancePhase = 0;
+  let danceRafId: number | null = null;
 
   const updateEyes = (mouseX: number, mouseY: number) => {
+    if (dancing) return;
+
     if (document.getElementById("desktop")?.classList.contains("panic-shake")) {
       return;
     }
@@ -170,11 +175,73 @@ export function initXEyes(container: HTMLElement) {
     });
   };
 
+  function startDancing() {
+    if (dancing) return;
+    dancing = true;
+    container.classList.add("dancing");
+    container.classList.remove("dizzy", "evil", "tearing");
+
+    pupils.forEach((p) => {
+      p.style.backgroundColor = "var(--be-yellow)";
+      p.style.boxShadow = "0 0 8px var(--be-yellow)";
+      p.style.width = "22px";
+      p.style.height = "22px";
+      p.classList.remove("animate-spin");
+    });
+    eyes.forEach((eye) => {
+      eye.style.backgroundColor = "white";
+    });
+
+    container.dispatchEvent(new CustomEvent("xeyes-blink"));
+
+    function loop() {
+      if (!dancing) return;
+      dancePhase += 0.04;
+      const r = 9;
+      pupils.forEach((pupil, i) => {
+        const phase = dancePhase + (i === 0 ? 0 : Math.PI);
+        const x = Math.cos(phase) * r;
+        const y = Math.sin(phase * 2) * r * 0.55;
+        pupil.style.transform = `translate(${x}px, ${y}px)`;
+      });
+      danceRafId = requestAnimationFrame(loop);
+    }
+    loop();
+  }
+
+  function stopDancing() {
+    if (!dancing) return;
+    dancing = false;
+    container.classList.remove("dancing");
+
+    if (danceRafId) {
+      cancelAnimationFrame(danceRafId);
+      danceRafId = null;
+    }
+
+    pupils.forEach((p) => {
+      p.style.backgroundColor = "black";
+      p.style.boxShadow = "none";
+      p.style.width = "20px";
+      p.style.height = "20px";
+    });
+    eyes.forEach((eye) => {
+      eye.style.backgroundColor = "white";
+    });
+  }
+
+  const onMusicState = (e: Event) => {
+    const playing = (e as CustomEvent).detail?.playing ?? false;
+    if (playing) startDancing();
+    else stopDancing();
+  };
+
   document.addEventListener("mousemove", onMouseMove);
   document.addEventListener("touchmove", onTouchMove, { passive: false });
   document.documentElement.addEventListener("mouseleave", setEvilMode);
   window.addEventListener("blur", setEvilMode);
   document.addEventListener("mouseenter", onMouseEnter);
+  document.addEventListener("music-state", onMusicState);
 
   if (windowEl) {
     windowEl.addEventListener("window-closed", () => {
@@ -183,9 +250,14 @@ export function initXEyes(container: HTMLElement) {
       document.documentElement.removeEventListener("mouseleave", setEvilMode);
       window.removeEventListener("blur", setEvilMode);
       document.removeEventListener("mouseenter", onMouseEnter);
+      document.removeEventListener("music-state", onMusicState);
       if (rafId) {
         cancelAnimationFrame(rafId);
         rafId = null;
+      }
+      if (danceRafId) {
+        cancelAnimationFrame(danceRafId);
+        danceRafId = null;
       }
     }, { once: true });
   }

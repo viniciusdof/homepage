@@ -52,6 +52,12 @@ const ogImage = new URL(faviconPng.src, Astro.url);
 
     <script>
       import "../scripts/windowManager.ts";
+      import { initScreenSaver } from "../scripts/screenSaver";
+      import { initStickyNotes } from "../scripts/stickyNotes";
+
+      initScreenSaver();
+      const addNote = initStickyNotes();
+      (window as any).addStickyNote = addNote;
     </script>
   </body>
 </html>

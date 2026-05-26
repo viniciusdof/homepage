@@ -40,83 +40,131 @@ const colors = [
     <div class="absolute inset-0 pointer-events-none opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
   </div>
 
-  <div class="p-2 flex flex-col gap-2 be-well m-1 bg-[#eeeeee] border-t-white border-l-white">
-    <div class="flex flex-col gap-1">
-      <div class="flex gap-2 items-center">
-        <input 
-          type="text" 
-          id="guest-name" 
-          placeholder={t('guestbook.name_placeholder')}
-          class="be-inset flex-1 px-2 py-1.5 text-[11px] focus:outline-none bg-white border border-be-shadow font-mono"
-        />
-        <div class="flex flex-wrap gap-1 items-center bg-black/5 p-1 border border-be-shadow/30 max-w-[120px]" id="name-color-picker">
-          <span class="text-[7px] font-bold uppercase w-full mb-0.5 opacity-50">{t('guestbook.name_color')}</span>
-          {colors.map(c => (
-            <div class="color-tile w-3.5 h-3.5 rounded-sm border border-black cursor-pointer" style={`background: ${c}`} data-color={c}></div>
+  <div class="guestbook-compose p-2 flex flex-col gap-2 be-well m-1 bg-[#eeeeee] border-t-white border-l-white">
+    <div class="flex gap-2 items-center">
+      <div class="flex flex-wrap gap-1 items-center bg-black/5 p-1 border border-be-shadow/30 max-w-[120px]" id="name-color-picker">
+        <span class="text-[7px] font-bold uppercase w-full mb-0.5 opacity-50">{t('guestbook.name_color')}</span>
+        {colors.map(c => (
+          <div class="color-tile w-3.5 h-3.5 rounded-sm border border-black cursor-pointer" style={`background: ${c}`} data-color={c}></div>
+        ))}
+      </div>
+      <input
+        type="text"
+        id="guest-name"
+        placeholder={t('guestbook.name_placeholder')}
+        class="be-inset flex-1 px-2 py-1.5 text-[11px] focus:outline-none bg-white border border-be-shadow font-mono"
+      />
+    </div>
+
+    <div class="relative">
+      <div id="insert-popup" class="hidden absolute bottom-full mb-0.5 right-0 bg-be-grey border border-be-black shadow-[2px_2px_0_rgba(0,0,0,0.25)] p-1.5 z-20 w-[200px]">
+        <div class="text-[7px] font-bold uppercase opacity-50 mb-0.5">Emoticons</div>
+        <div class="flex flex-wrap gap-px mb-1.5">
+          {[':-)',':-D',';-)',':-P','B-)','<3',':-O','(Y)',':-*','X-D'].map(e => (
+            <button class="emoticon-btn px-1.5 py-[3px] text-[9px] font-mono font-bold cursor-pointer whitespace-nowrap bg-be-grey border border-be-black shadow-[inset_1px_1px_var(--be-white),1px_1px_var(--be-shadow)] hover:bg-[#eeeeee] active:shadow-[inset_1px_1px_var(--be-black),inset_-1px_-1px_var(--be-white)]">{e}</button>
           ))}
         </div>
-      </div>
-    </div>
-    
-    <div class="flex flex-col gap-1">
-      <div class="flex flex-col gap-1 bg-black/5 p-1 border border-be-shadow/30 mb-1">
-        <div class="flex flex-wrap gap-1 items-center border-b border-be-shadow/20 pb-1" id="text-color-picker">
-          <span class="text-[7px] font-bold uppercase mr-2 opacity-50">{t('guestbook.color_tags')}</span>
+        <div class="border-t border-be-shadow/20 pt-1">
+          <div class="text-[7px] font-bold uppercase opacity-50 mb-0.5">{t('guestbook.color_tags')}</div>
           <div class="flex flex-wrap gap-1">
             {colors.map(c => (
-              <div class="color-tile w-4 h-4 rounded-sm border border-black cursor-pointer hover:scale-110 transition-transform" style={`background: ${c}`} data-color={c}></div>
-            ))}
-          </div>
-        </div>
-        
-        <div class="flex flex-wrap gap-1 py-0.5" id="emoticon-bar">
-          <span class="text-[7px] font-bold uppercase mr-2 opacity-50 self-center">{t('guestbook.mood')}</span>
-          <div class="flex flex-wrap gap-1 flex-1">
-            {[':-)',':-D',';-)',':-P','B-)','<3',':-O','(Y)',':-*','X-D'].map(e => (
-              <button class="be-button !px-2 !py-0.5 text-[10px] font-mono hover:!bg-be-yellow transition-colors whitespace-nowrap min-w-[30px]">{e}</button>
+              <div class="insert-color-tile w-4 h-4 rounded-sm border border-black cursor-pointer hover:scale-110 transition-transform" style={`background: ${c}`} data-color={c}></div>
             ))}
           </div>
         </div>
       </div>
-
-      <textarea 
-        id="guest-msg" 
+      <textarea
+        id="guest-msg"
         placeholder={t('guestbook.placeholder')}
-        class="be-inset flex-1 px-2 py-1.5 text-[11px] focus:outline-none h-20 bg-white resize-none border border-be-shadow font-mono leading-tight"
+        class="be-inset w-full px-2 py-1.5 text-[11px] focus:outline-none h-24 bg-white resize-none border border-be-shadow font-mono leading-tight"
       ></textarea>
-      
-      <div class="flex gap-1 mt-1">
-        <button id="clear-btn" class="be-button !px-3 text-[10px] uppercase font-bold opacity-60">{t('guestbook.clear')}</button>
-        <button id="send-btn" class="be-button !bg-be-yellow !flex-1 !flex flex-row items-center justify-center py-2 text-[11px] uppercase font-bold gap-3 group">
-          <Image src={sendIcon} alt="Send" width={20} height={20} class="w-5 h-5 object-contain group-hover:-translate-y-1 transition-transform" />
-          <span class="mt-[1px]">{t('guestbook.submit')}</span>
-        </button>
+      <div class="flex justify-between items-center mt-0.5">
+        <button id="insert-btn" class="text-[10px] font-bold px-1.5 py-[3px] cursor-pointer leading-none bg-be-grey border border-be-black shadow-[inset_1px_1px_var(--be-white),1px_1px_var(--be-shadow)] hover:bg-[#eeeeee] active:shadow-[inset_1px_1px_var(--be-black),inset_-1px_-1px_var(--be-white)]" title="Insert emoticon or color tag">☺</button>
+        <span id="char-count" class="text-[8px] font-mono pointer-events-none select-none opacity-30">0/280</span>
       </div>
+    </div>
+
+    <div class="flex gap-1">
+      <button id="clear-btn" class="be-button !px-3 text-[10px] uppercase font-bold opacity-60">{t('guestbook.clear')}</button>
+      <button id="send-btn" class="be-button !bg-be-yellow !flex-1 !flex flex-row items-center justify-center py-2 text-[11px] uppercase font-bold gap-3 group">
+        <Image src={sendIcon} alt="Send" width={20} height={20} class="w-5 h-5 object-contain group-hover:-translate-y-1 transition-transform" />
+        <span class="mt-[1px]">{t('guestbook.submit')}</span>
+      </button>
     </div>
   </div>
 </div>
 
 <script>
   import { ui } from "../../i18n/ui";
+  import { showNotification } from "../../scripts/notifications";
+
   const root = document.getElementById('guestbook-app')!;
   const lang = (root.getAttribute('data-lang') || 'pt-br') as keyof typeof ui;
   const t = (key: string) => (ui[lang] as any)[key] || (ui['pt-br'] as any)[key];
 
+  const MAX_CHARS = 280;
+
   const entriesList = root.querySelector('#entries-list');
   const nameInput = root.querySelector('#guest-name') as HTMLInputElement;
   const msgInput = root.querySelector('#guest-msg') as HTMLTextAreaElement;
+  const charCount = root.querySelector('#char-count') as HTMLElement;
   const sendBtn = root.querySelector('#send-btn') as HTMLButtonElement;
   const clearBtn = root.querySelector('#clear-btn');
   const nameColorPicker = root.querySelector('#name-color-picker');
-  const textColorPicker = root.querySelector('#text-color-picker');
-  const emoticonBar = root.querySelector('#emoticon-bar');
-  
+  const insertBtn = root.querySelector('#insert-btn') as HTMLButtonElement;
+  const insertPopup = root.querySelector('#insert-popup') as HTMLElement;
+
   let selectedNameColor = '#000';
 
-  emoticonBar?.querySelectorAll('button').forEach(btn => {
+  insertBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = !insertPopup.classList.contains('hidden');
+    insertPopup.classList.toggle('hidden');
+    insertBtn.style.background = isOpen ? '' : 'var(--be-yellow)';
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!insertPopup.classList.contains('hidden') &&
+        !insertPopup.contains(e.target as Node) &&
+        e.target !== insertBtn) {
+      insertPopup.classList.add('hidden');
+      insertBtn.style.background = '';
+    }
+  });
+
+  insertPopup?.querySelectorAll('.emoticon-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       insertAtCursor(msgInput, btn.textContent!);
+      insertPopup.classList.add('hidden');
+      insertBtn.style.background = '';
+      msgInput.focus();
     });
+  });
+
+  insertPopup?.querySelectorAll('.insert-color-tile').forEach(tile => {
+    tile.addEventListener('click', () => {
+      const color = tile.getAttribute('data-color')!;
+      wrapSelection(msgInput, `[c=${color}]`, `[/c]`);
+      insertPopup.classList.add('hidden');
+      insertBtn.style.background = '';
+    });
+  });
+
+  msgInput?.addEventListener('input', () => {
+    const len = msgInput.value.length;
+    if (charCount) {
+      charCount.textContent = `${len}/${MAX_CHARS}`;
+      if (len > MAX_CHARS) {
+        charCount.style.color = '#d32f2f';
+        charCount.style.fontWeight = 'bold';
+      } else if (len > MAX_CHARS * 0.85) {
+        charCount.style.color = '#f57c00';
+        charCount.style.fontWeight = 'bold';
+      } else {
+        charCount.style.color = '';
+        charCount.style.fontWeight = '';
+      }
+    }
   });
 
   nameColorPicker?.querySelectorAll('.color-tile').forEach(tile => {
@@ -128,13 +176,6 @@ const colors = [
       tile.classList.add('active');
       selectedNameColor = tile.getAttribute('data-color')!;
       nameInput.style.color = selectedNameColor;
-    });
-  });
-
-  textColorPicker?.querySelectorAll('.color-tile').forEach(tile => {
-    tile.addEventListener('click', () => {
-      const color = tile.getAttribute('data-color')!;
-      wrapSelection(msgInput, `[c=${color}]`, `[/c]`);
     });
   });
 
@@ -190,18 +231,17 @@ const colors = [
         }
         
         entriesList.innerHTML = entries.map((e: any) => `
-          <div class="p-4 border-b border-be-shadow/10 bg-white/40 hover:bg-white/60 transition-colors group relative overflow-hidden">
-            <div class="flex justify-between items-baseline mb-1 relative z-10">
-              <div class="flex items-center gap-2">
-                <div class="w-1.5 h-1.5 rounded-full" style="background: ${e.color || '#000'}"></div>
-                <span class="font-bold text-[12px] uppercase tracking-tight" style="color: ${e.color || '#000'}">${e.name}</span>
+            <div class="entry-row p-4 border-b border-be-shadow/10 bg-white/40 hover:bg-white/60 transition-colors relative overflow-hidden">
+              <div class="flex justify-between items-baseline mb-1">
+                <div class="flex items-center gap-2">
+                  <div class="w-1.5 h-1.5 rounded-full" style="background:${e.color || '#000'}"></div>
+                  <span class="font-bold text-[12px] uppercase tracking-tight" style="color:${e.color || '#000'}">${e.name}</span>
+                </div>
+                <span class="text-[8px] text-be-shadow font-mono opacity-60">${e.date}</span>
               </div>
-              <span class="text-[8px] text-be-shadow font-mono opacity-60">${e.date}</span>
+              <div class="text-[11px] leading-snug text-be-black break-words font-mono">${formatMsg(e.msg)}</div>
             </div>
-            <div class="text-[11px] leading-snug text-be-black break-words font-mono relative z-10">${formatMsg(e.msg)}</div>
-            <div class="absolute -right-2 -bottom-2 w-8 h-8 bg-be-yellow/5 rounded-full group-hover:scale-150 transition-transform"></div>
-          </div>
-        `).join('');
+          `).join('');
       }
     } catch (e) {
       console.error("Failed to load guestbook entries", e);
@@ -238,7 +278,7 @@ const colors = [
   sendBtn?.addEventListener('click', async () => {
     const name = nameInput.value.trim();
     const msg = msgInput.value.trim();
-    if (!msg) return;
+    if (!msg || msg.length > MAX_CHARS) return;
 
     sendBtn.disabled = true;
     const originalContent = sendBtn.innerHTML;
@@ -259,6 +299,7 @@ const colors = [
         msgInput.value = '';
         await load();
         entriesList?.scrollTo({ top: 0, behavior: 'smooth' });
+        showNotification('VDoF OS', '✓ Message sent! Thanks for signing the guestbook.');
       }
     } catch (e) {
       console.error("Failed to send guestbook entry", e);
@@ -307,5 +348,13 @@ const colors = [
 
   .no-scrollbar::-webkit-scrollbar {
     display: none;
+  }
+
+  @media (max-width: 640px) {
+    .guestbook-compose {
+      position: sticky;
+      bottom: 0;
+      z-index: 10;
+    }
   }
 </style>

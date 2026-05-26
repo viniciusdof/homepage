@@ -51,7 +51,13 @@ const t = useTranslations(lang);
   ))}
 
   <hr class="border-t border-be-shadow my-1 mx-0" />
-  
+
+  <div class="be-menu-item px-[15px] py-[4px] cursor-pointer hover:bg-[#3366cc] hover:text-white" id="new-note-menu-item">
+    <span>{t("nav.new_note")}</span>
+  </div>
+
+  <hr class="border-t border-be-shadow my-1 mx-0" />
+
   <div class="be-menu-item px-[15px] py-[4px] cursor-pointer hover:bg-[#3366cc] hover:text-white" data-window="credits">
     <span>{t("nav.credits")}</span>
   </div>
@@ -89,6 +95,11 @@ const t = useTranslations(lang);
       if (item) {
         setTimeout(() => menu?.classList.add("hidden"), 100);
       }
+    });
+
+    document.getElementById("new-note-menu-item")?.addEventListener("click", () => {
+      menu?.classList.add("hidden");
+      (window as any).addStickyNote?.();
     });
   }
 
